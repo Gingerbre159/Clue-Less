@@ -4,7 +4,7 @@ public class Player {
 	/***Variables***/
 	private int playerNum;
 	private String character;
-	private String currRoom = null;
+	private Room currRoom = null;
 	
 	/***Methods***/
 	Player(int playerNum, String character){
@@ -21,7 +21,7 @@ public class Player {
 		return this.character;
 	}
 	
-	String getCurrRoom() {
+	Room getCurrRoom() {
 		return this.currRoom;
 	}
 	
@@ -34,7 +34,7 @@ public class Player {
 		this.character = character;
 	}
 	
-	void setCurrRoom(String newRoom) {
+	void setCurrRoom(Room newRoom) {
 		this.currRoom = newRoom;
 	}
 

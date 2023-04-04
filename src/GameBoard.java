@@ -11,7 +11,7 @@ public class GameBoard {
 		abr = new String[gm.getNumRooms()];
 		
 		for(int i = 0; i < abr.length; i++) {
-			String room = gm.getRoomAt(i);
+			String room = gm.getRoomAt(i).getName();
 			abr[i] = room.substring(0, 3);
 		}
 	}

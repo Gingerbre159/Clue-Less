@@ -50,10 +50,11 @@ public class Server {
 	}
 	
 	static void chooseCharacter(int playerNum, String character) {
-		Player temp = new Player(playerNum, character);
-		temp.setCurrRoom(getStartArea(character));
-		currPlayerLocations.set(playerNum, temp.getCurrRoom());
-		players.set(playerNum, temp);
+		Player tempPlayerObject = new Player(playerNum, character);
+		Room tempRoomObject = new Room(getStartArea(character));
+		tempPlayerObject.setCurrRoom(tempRoomObject);
+		currPlayerLocations.set(playerNum, tempPlayerObject.getCurrRoom().getName());
+		players.set(playerNum, tempPlayerObject);
 	}
 	
 	static void printAvailableCharacters() {
@@ -80,7 +81,7 @@ public class Server {
 	static void chooseCorrectAnswers(int randWeaponNum, int randCharacterNum, int randRoomNum) {
 		gm.setCorrectWeapon(gm.getWeaponAt(randWeaponNum));
 		gm.setCorrectCharacter(gm.getCharacterAt(randCharacterNum));
-		gm.setCorrectRoom(gm.getRoomAt(randRoomNum));
+		gm.setCorrectRoom(gm.getRoomAt(randRoomNum).getName());
 	}
 	
 	static void printTurnOptions(ArrayList<String> options) {
@@ -97,7 +98,8 @@ public class Server {
 	
 	static void move(int playerNum, String location) {
 		Player temp = players.get(playerNum);
-		temp.setCurrRoom(location);
+		Room room = gm.getRoom(location);
+		temp.setCurrRoom(room);
 		players.set(playerNum, temp);
 	}
 	
@@ -182,7 +184,7 @@ public class Server {
         		gb.constructBoard();
         	}
             
-            System.out.println("You are in: " + players.get(numPlayers-1).getCurrRoom());
+            System.out.println("You are in: " + players.get(numPlayers-1).getCurrRoom().getName());
             System.out.println(divider);
             System.out.println("Your options this turn are:");
             printTurnOptions(tm.getTurnOptions(players.get(numPlayers-1).getCurrRoom(), gm));

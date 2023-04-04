@@ -13,41 +13,29 @@ public class TurnManager {
 		this.currentTurn++;
 	}
 	
-	private ArrayList<String> getAdjacentHallways(String room, GameManager gm) {
-		
-		ArrayList<String> hallways = new ArrayList<>();
-		for(int i = 0; i < gm.getNumRoomsAndHallways(); i++) {
-			if(gm.getRoomOrHallwayAt(i).contains(room) && !room.equals(gm.getRoomOrHallwayAt(i))) {
-				hallways.add(gm.getRoomOrHallwayAt(i));
-			}
-		}
-		
-		return hallways;
-	}
-	
 	String getStartHallway(String room, GameManager gm) {
 		if(room.contains("Plum")) {
-			return gm.getRoomOrHallwayAt(5);
+			return gm.getHallwayAt(2).getName();
 		}
 		
 		if(room.contains("Mustard")) {
-			return gm.getRoomOrHallwayAt(7);
+			return gm.getHallwayAt(4).getName();
 		}
 		
 		if(room.contains("Scarlet")) {
-			return gm.getRoomOrHallwayAt(3);
+			return gm.getHallwayAt(1).getName();
 		}
 		
 		if(room.contains("White")) {
-			return gm.getRoomOrHallwayAt(19);
+			return gm.getHallwayAt(11).getName();
 		}
 		
 		if(room.contains("Peacock")) {
-			return gm.getRoomOrHallwayAt(13);
+			return gm.getHallwayAt(7).getName();
 		}
 		
 		if(room.contains("Green")) {
-			return gm.getRoomOrHallwayAt(17);
+			return gm.getHallwayAt(10).getName();
 		}
 		
 		return "Could not find start hallway";
@@ -62,25 +50,23 @@ public class TurnManager {
 		return options;
 	}
 	
-	ArrayList<String> getMoveOptions(String currRoom, GameManager gm) {
+	ArrayList<String> getMoveOptions(Room currRoom, GameManager gm) {
 		ArrayList<String> options = new ArrayList<>();
 		
-		if(!gm.roomsAndHallwaysListContains(currRoom)) {
-			options.add(getStartHallway(currRoom, gm));
+		// if player is in start area, add appropriate hallway to move options
+		if(!gm.roomsListContains(currRoom.getName()) && !gm.hallwaysListContains(currRoom.getName())) {
+			options.add(getStartHallway(currRoom.getName(), gm));
 		}
 		
-		if(gm.roomsListContains(currRoom)) {
-			options.addAll(getAdjacentHallways(currRoom, gm));
-		}
-		
-		if(gm.roomsAndHallwaysListContains(currRoom) && !gm.roomsListContains(currRoom)) {
-			options.addAll(getAdjacentRooms(currRoom, gm));
+		// if player is in a room or hallway, add adjacent rooms/hallways to move options
+		if(gm.roomsListContains(currRoom.getName()) || gm.hallwaysListContains(currRoom.getName())) {
+			options.addAll(currRoom.getAdjRoomNames());
 		}
 		
 		return options;
 	}
 	
-	ArrayList<String> getTurnOptions(String currRoom, GameManager gm) {
+	ArrayList<String> getTurnOptions(Room currRoom, GameManager gm) {
 		ArrayList<String> options = new ArrayList<>();
 		
 		if(currentTurn/numPlayers == 0) {
@@ -89,16 +75,11 @@ public class TurnManager {
 			return options;
 		}
 		
-//		if(gm.roomsListContains(currRoom)) {
-//			options.add("Move to " + getAdjacentHallways(currRoom, gm) + ". Stay");
-//		}
-		
-		if(gm.roomsAndHallwaysListContains(currRoom)) {
+		if(gm.roomsListContains(currRoom.getName()) || gm.hallwaysListContains(currRoom.getName())) {
 			options.add("Move");
 		}
 		
-		if(gm.roomsListContains(currRoom)) {
-			options.add("Stay");
+		if(gm.roomsListContains(currRoom.getName())) {
 			options.add("Suggestion");
 		}
 		
