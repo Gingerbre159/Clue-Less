@@ -199,6 +199,29 @@ public class Server {
                 System.out.println(divider);
                 move(numPlayers-1, answer);
             }
+		
+	    if(answer.equals("Accusation")) {
+                System.out.println("The accused suspect: ");
+                String suspect = sc.nextLine();
+               
+                System.out.println("The room where the crime occured: ");
+                String room = sc.nextLine();
+               
+                System.out.println("The weapon used during the crime: ");
+                String weapon = sc.nextLine();
+            
+                System.out.println("The accusation: " + suspect + " committed the crime in the " + room + " with the " + weapon);
+             }
+            
+             if(answer.equals("Suggestion")) {
+                System.out.println("Choose a suspect: ");
+                String suspect = sc.nextLine();
+               
+                System.out.println("Choose a weapon: ");
+                String weapon = sc.nextLine();
+               
+                System.out.println("The suggestion: Crime was committed in the " + players.get(numPlayers-1).getCurrRoom().getName() + " by " + suspect + " with the " + weapon);
+             }
             
             //Next Turn
             tm.nextTurn();
