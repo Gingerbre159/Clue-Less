@@ -31,50 +31,48 @@ public class GameManager {
 		"Ballroom", 
 		"Kitchen"
 	};
-	private String[] roomAndHallwayNamesArray = {
-		"Study", 
+//	private String[] roomAndHallwayNamesArray = {
+//		"Study", 
+//		"Study/Hall", 
+//		"Hall", 
+//		"Hall/Lounge", 
+//		"Lounge", 
+//		"Study/Library", 
+//		"Hall/Billiard Room", 
+//		"Lounge/Dining Room", 
+//		"Library", 
+//		"Library/Billiard Room", 
+//		"Billiard Room", 
+//		"Billiard Room/Dining Room", 
+//		"Dining Room",
+//		"Library/Conservatory", 
+//		"Billiard Room/Ballroom", 
+//		"Dining Room/Kitchen", 
+//		"Conservatory", 
+//		"Conservatory/Ballroom", 
+//		"Ballroom", 
+//		"Ballroom/Kitchen", 
+//		"Kitchen"
+//	};
+	private String[] hallwayNamesArray = {
 		"Study/Hall", 
-		"Hall", 
 		"Hall/Lounge", 
-		"Lounge", 
 		"Study/Library", 
 		"Hall/Billiard Room", 
 		"Lounge/Dining Room", 
-		"Library", 
 		"Library/Billiard Room", 
-		"Billiard Room", 
 		"Billiard Room/Dining Room", 
-		"Dining Room",
 		"Library/Conservatory", 
 		"Billiard Room/Ballroom", 
 		"Dining Room/Kitchen", 
-		"Conservatory", 
 		"Conservatory/Ballroom", 
-		"Ballroom", 
 		"Ballroom/Kitchen", 
-		"Kitchen"
 	};
-	private String[] hallwayNamesArray = {
-			"Study/Hall", 
-			"Hall/Lounge", 
-			"Study/Library", 
-			"Hall/Billiard Room", 
-			"Lounge/Dining Room", 
-			"Library/Billiard Room", 
-			"Billiard Room/Dining Room", 
-			"Library/Conservatory", 
-			"Billiard Room/Ballroom", 
-			"Dining Room/Kitchen", 
-			"Conservatory/Ballroom", 
-			"Ballroom/Kitchen", 
-		};
 	private ArrayList<Room> rooms = new ArrayList<>();
 	private ArrayList<Room> hallways = new ArrayList<>();
 	
 	private ArrayList<String> weapons = new ArrayList<>(Arrays.asList(weaponsArray));
 	private ArrayList<String> characters = new ArrayList<>(Arrays.asList(charactersArray));
-//	private ArrayList<String> rooms = new ArrayList<>(Arrays.asList(roomsArray));
-//	private ArrayList<String> roomsAndHallways = new ArrayList<>(Arrays.asList(roomsAndHallwaysArray));
 	
 	private static String correctWeapon;
 	private static String correctCharacter;
@@ -82,6 +80,7 @@ public class GameManager {
 	
 	/***Methods***/
 	GameManager() {
+		
 		
 		// Create list of rooms and hallways
 		for(int i = 0; i < this.roomNamesArray.length; i++) {
@@ -101,6 +100,7 @@ public class GameManager {
 			
 			this.hallways.add(temp);
 		}
+		
 		
 		// Attach adjacent rooms
 		for(int i = 0; i < this.rooms.size(); i++) {
@@ -233,6 +233,18 @@ public class GameManager {
 	
 	int getNumRoomsAndHallways() {
 		return (rooms.size() + hallways.size());
+	}
+	
+	String getCorrectWeapon() {
+		return correctWeapon;
+	}
+	
+	String getCorrectCharacter() {
+		return correctCharacter;
+	}
+	
+	String getCorrectRoom() {
+		return correctRoom;
 	}
 	
 	// Setters

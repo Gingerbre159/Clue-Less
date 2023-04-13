@@ -21,6 +21,37 @@ public class Server {
 		numPlayers++;
 	}
 	
+	static void assignStartKnowledge() {
+		int counter = 0;
+		
+		for(int i = 0; i < gm.getNumWeapons(); i++) {
+			if(!gm.getCorrectWeapon().equals(gm.getWeaponAt(i))) {
+				Player temp = players.get(counter % numPlayers);
+				temp.addKnownWeapon(gm.getWeaponAt(i));
+				players.set((counter % numPlayers), temp);
+				counter++;
+			}
+		}
+		
+		for(int i = 0; i < gm.getNumCharacters(); i++) {
+			if(!gm.getCorrectCharacter().equals(gm.getCharacterAt(i))) {
+				Player temp = players.get(counter % numPlayers);
+				temp.addKnownCharacter(gm.getCharacterAt(i));
+				players.set((counter % numPlayers), temp);
+				counter++;
+			}
+		}
+		
+		for(int i = 0; i < gm.getNumRooms(); i++) {
+			if(!gm.getCorrectRoom().equals(gm.getRoomAt(i).getName())) {
+				Player temp = players.get(counter % numPlayers);
+				temp.addKnownRoom(gm.getRoomAt(i).getName());
+				players.set((counter % numPlayers), temp);
+				counter++;
+			}
+		}
+	}
+	
 	static String getStartArea(String character) {
 		if(gm.getCharacterAt(0).equals(character)) {
 			return "Plum Start Area";
@@ -173,6 +204,8 @@ public class Server {
         /*Start Game*/
         
         tm.setNumPlayers(numPlayers);
+        assignStartKnowledge();
+        players.get(numPlayers-1).printData();
         
         while(tm.getCurrentTurn()<5) {
         	System.out.println();
