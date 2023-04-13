@@ -205,7 +205,7 @@ public class Server {
         
         tm.setNumPlayers(numPlayers);
         assignStartKnowledge();
-        players.get(numPlayers-1).printData();
+        // players.get(numPlayers-1).printData();
         
         while(tm.getCurrentTurn()<5) {
         	System.out.println();
