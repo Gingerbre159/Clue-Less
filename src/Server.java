@@ -21,6 +21,37 @@ public class Server {
 		numPlayers++;
 	}
 	
+	static void assignStartKnowledge() {
+		int counter = 0;
+		
+		for(int i = 0; i < gm.getNumWeapons(); i++) {
+			if(!gm.getCorrectWeapon().equals(gm.getWeaponAt(i))) {
+				Player temp = players.get(counter % numPlayers);
+				temp.addKnownWeapon(gm.getWeaponAt(i));
+				players.set((counter % numPlayers), temp);
+				counter++;
+			}
+		}
+		
+		for(int i = 0; i < gm.getNumCharacters(); i++) {
+			if(!gm.getCorrectCharacter().equals(gm.getCharacterAt(i))) {
+				Player temp = players.get(counter % numPlayers);
+				temp.addKnownCharacter(gm.getCharacterAt(i));
+				players.set((counter % numPlayers), temp);
+				counter++;
+			}
+		}
+		
+		for(int i = 0; i < gm.getNumRooms(); i++) {
+			if(!gm.getCorrectRoom().equals(gm.getRoomAt(i).getName())) {
+				Player temp = players.get(counter % numPlayers);
+				temp.addKnownRoom(gm.getRoomAt(i).getName());
+				players.set((counter % numPlayers), temp);
+				counter++;
+			}
+		}
+	}
+	
 	static String getStartArea(String character) {
 		if(gm.getCharacterAt(0).equals(character)) {
 			return "Plum Start Area";
@@ -173,6 +204,8 @@ public class Server {
         /*Start Game*/
         
         tm.setNumPlayers(numPlayers);
+        assignStartKnowledge();
+        players.get(numPlayers-1).printData();
         
         while(tm.getCurrentTurn()<5) {
         	System.out.println();
@@ -199,6 +232,48 @@ public class Server {
                 System.out.println(divider);
                 move(numPlayers-1, answer);
             }
+		
+	    if(answer.equals("Accusation")) {
+                System.out.println("The accused suspect: ");
+                String suspect = sc.nextLine();
+               
+                System.out.println("The room where the crime occured: ");
+                String room = sc.nextLine();
+               
+                System.out.println("The weapon used during the crime: ");
+                String weapon = sc.nextLine();
+            
+                System.out.println("The accusation: " + suspect + " committed the crime in the " + room + " with the " + weapon);
+		    
+		//if (suspect == the real suspect && room == the real room && weapon == the real weapon){
+                //   System.out.println("Congrats, you have won the game!")
+                //else
+                //   System.out.println("Your accusation is incorrect, you have lost the game. Move to the nearest room. You will still participate in suggestions, if chosen").     
+             }
+            
+             if(answer.equals("Suggestion")) {
+                System.out.println("Choose a suspect: ");
+                String suspect = sc.nextLine();
+               
+                System.out.println("Choose a weapon: ");
+                String weapon = sc.nextLine();
+               
+                System.out.println("The suggestion: Crime was committed in the " + players.get(numPlayers-1).getCurrRoom().getName() + " by " + suspect + " with the " + weapon);
+		     
+		//assume that player number X made the suggestion
+                //ask player #X+1 if they have the suspect or weapon or room that was suggested
+                //if(player #X+1 has either the suspect or weapon or room suggested)
+                //   player #X+1 reveals one of those cards to player X
+                //   game continues as usual. It is the next player's turn to make a play
+                //else
+                //   ask player #X+2 if they have the suspect or weapon or room that was suggested
+                //   if(player #X+2 has either the suspect or weapon or room suggested)
+                //       player #X+2 reveals one of those cards to player X
+                //       game continues as usual. It is the next player's turn to make a play
+                //until someone shows a card, keep repeating the logic in the else statement by asking the other players if they have any of the cards
+                //if no player has any of the suggested cards, the turn is over for player X. game continues as usual. It is the next player's turn to make a play
+		     
+             }
             
             //Next Turn
             tm.nextTurn();
