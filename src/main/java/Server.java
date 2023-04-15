@@ -15,7 +15,7 @@ public class Server {
 	/***Variables***/
 	
 	// Local variables
-	private static int numPlayers = 0;
+	private static int numPlayers = 3;
 	private static Player player;
 	private static ArrayList<String> chosenCharacters = new ArrayList<>();
 	//private static ArrayList<Player> players = new ArrayList<>();
@@ -131,6 +131,9 @@ public class Server {
 	// Assign a character to a player
 	static void chooseCharacter(String character) {
 		player.character = character;
+		player.currRoom = new Room(getStartArea(player.character));
+		
+//		player.currRoom = gm.getRoom(getStartArea(player.character));
 	}
 	
 	// Output available characters for player to choose from
@@ -178,6 +181,14 @@ public class Server {
 	static void move(String location) {
 		Room room = gm.getRoom(location);
 		player.currRoom = room;
+	}
+	
+	// Display current knowledge
+	static void printKnowns() {
+		System.out.println("You know the following cannot be guilty:");
+		System.out.println("	Weapons:" + player.knownWeapons);
+		System.out.println("	Characters:" + player.knownCharacters);
+		System.out.println("	Rooms:" + player.knownRooms);
 	}
 	
 	
@@ -281,8 +292,13 @@ public class Server {
         /*Begin while loop, this breaks when game ends*/
         while(tm.getCurrentTurn()<5) {
         	
-        	// Display turn number
-        	System.out.println("Current turn: " + tm.getCurrentTurn());
+        	
+        	/*Display beginning of turn info*/
+        	System.out.println(divider);
+        	System.out.println("Current turn: " + (tm.getCurrentTurn()+1));
+        	System.out.println();
+        	printKnowns();
+        	System.out.println();
         	
         	
         	/*Construct current game board*/

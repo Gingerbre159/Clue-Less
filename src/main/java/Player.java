@@ -7,9 +7,9 @@ public class Player {
 	public String character;
 	public Room currRoom = null;
 	public Boolean isEliminated = false;
-	private ArrayList<String> knownWeapons = new ArrayList<>();
-	private ArrayList<String> knownCharacters = new ArrayList<>();
-	private ArrayList<String> knownRooms = new ArrayList<>();
+	public ArrayList<String> knownWeapons = new ArrayList<>();
+	public ArrayList<String> knownCharacters = new ArrayList<>();
+	public ArrayList<String> knownRooms = new ArrayList<>();
 	
 	/***Methods***/
 	Player(int playerNum, String character){
