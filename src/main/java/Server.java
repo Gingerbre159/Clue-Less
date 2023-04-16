@@ -142,6 +142,7 @@ public class Server {
 	static void chooseCharacter(String character) {
 		player.character = character;
 		player.currRoom = new Room(getStartArea(player.character));
+		chosenCharacters.add(character);
 	}
 	
 	// Output available characters for player to choose from
@@ -541,7 +542,6 @@ public class Server {
         player.currRoom = new Room(getStartArea(player));
         updatePlayer(player);
         
-        
         /*Wait to start the game*/
         
         // If the player is player 0 they decide when to start the game
@@ -603,9 +603,6 @@ public class Server {
             		gb.constructBoardWithStartAreas();
             	}
             	else {
-					//Needs to be fixed so chosenCharacters is the correct list of players in the game
-					//For testing manually add characters to list below
-					chosenCharacters.add("Professor Plum");
 					gb.contructBoardWithPlayers(getAllPlayerLocations(), chosenCharacters);
             		//gb.constructBoard();
             	}
