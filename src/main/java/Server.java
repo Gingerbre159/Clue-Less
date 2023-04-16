@@ -587,7 +587,7 @@ public class Server {
         
         
         /*Begin while loop, this breaks when game ends*/
-        while(tm.getCurrentTurn()<3 && !gm.winCondition) {
+        while(tm.getCurrentTurn()<9 && !gm.winCondition) {
         	
         	
         	/*Check if it is the player's turn and they are not eliminated*/
