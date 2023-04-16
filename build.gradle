@@ -16,10 +16,15 @@ repositories {
 }
 
 dependencies {
+
+    // FireBase and FireStore
     implementation 'com.google.firebase:firebase-admin:8.0.1'
     implementation 'com.google.cloud:google-cloud-firestore:2.6.2'
     
-    // Add any other required dependencies here
+    // Simple Logging Facade for Java library is used by some of the 
+    // Firebase dependencies. This is the logger for that to allow for 
+    // logging and debugging
+    implementation 'ch.qos.logback:logback-classic:1.2.9'
 }
 
 java {

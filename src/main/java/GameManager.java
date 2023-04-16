@@ -31,29 +31,6 @@ public class GameManager {
 		"Ballroom", 
 		"Kitchen"
 	};
-//	private String[] roomAndHallwayNamesArray = {
-//		"Study", 
-//		"Study/Hall", 
-//		"Hall", 
-//		"Hall/Lounge", 
-//		"Lounge", 
-//		"Study/Library", 
-//		"Hall/Billiard Room", 
-//		"Lounge/Dining Room", 
-//		"Library", 
-//		"Library/Billiard Room", 
-//		"Billiard Room", 
-//		"Billiard Room/Dining Room", 
-//		"Dining Room",
-//		"Library/Conservatory", 
-//		"Billiard Room/Ballroom", 
-//		"Dining Room/Kitchen", 
-//		"Conservatory", 
-//		"Conservatory/Ballroom", 
-//		"Ballroom", 
-//		"Ballroom/Kitchen", 
-//		"Kitchen"
-//	};
 	private String[] hallwayNamesArray = {
 		"Study/Hall", 
 		"Hall/Lounge", 
@@ -77,6 +54,8 @@ public class GameManager {
 	private static String correctWeapon;
 	private static String correctCharacter;
 	private static String correctRoom;
+	
+	public Boolean winCondition = false;
 	
 	/***Methods***/
 	GameManager() {
@@ -172,9 +151,21 @@ public class GameManager {
 		return false;
 	}
 	
-//	Boolean roomsAndHallwaysListContains(String s) {
-//		return roomsAndHallways.contains(s);
-//	}
+	void endScreen(int turnNum, int numPlayers, Player winner, int playerNum) {
+		// Display win screen for winner
+        if(turnNum % numPlayers == playerNum) {
+        	System.out.println("Congrats, you win!");
+        }
+        
+        // Show who won and the win condition for losers
+        else {
+        	System.out.println("Sorry, better luck next time");
+        	System.out.println("Winner: " + winner.character);
+        	System.out.println("Correct Weapon: " + correctWeapon);
+        	System.out.println("Correct Character: " + correctCharacter);
+        	System.out.println("Correct Room: " + correctRoom);
+        }
+	}
 	
 	// Getters
 	String getWeaponAt(int weaponNum) {
@@ -206,18 +197,6 @@ public class GameManager {
 	Room getHallwayAt(int hallwayNum) {
 		return hallways.get(hallwayNum);
 	}
-	
-//	String getRoomNameAt(int roomNum) {
-//		return rooms.get(roomNum).getName();
-//	}
-//	
-//	String getHallwayNameAt(int hallwayNum) {
-//		return hallways.get(hallwayNum).getName();
-//	}
-	
-//	String getRoomOrHallwayAt(int roomNum) {
-//		return roomsAndHallways.get(roomNum);
-//	}
 	
 	int getNumWeapons() {
 		return weapons.size();
