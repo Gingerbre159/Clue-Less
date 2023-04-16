@@ -167,6 +167,14 @@ public class GameManager {
         }
 	}
 	
+//	void printWeaponsUnknown(ArrayList<String> knownWeapons) {
+//		ArrayList<String> output = new ArrayList<>();
+//		
+//		for(int i = 0; i < )
+//		
+//		System.out.println();
+//	}
+	
 	// Getters
 	String getWeaponAt(int weaponNum) {
 		return weapons.get(weaponNum);
