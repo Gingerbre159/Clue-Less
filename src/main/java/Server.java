@@ -323,42 +323,80 @@ public class Server {
 	}
 	
 	// Get the current player from FireStore
+//	public static Player getCurrentPlayer() {
+//	    DocumentReference docRef = db.collection("game").document("currentPlayer");
+//	    ApiFuture<DocumentSnapshot> future = docRef.get();
+//	    Player currentPlayer = null;
+//
+//	    try {
+//	        DocumentSnapshot document = future.get();
+//	        if (document.exists()) {
+//	            Map<String, Object> data = document.getData();
+//	            if (data == null) {
+//	                return null;
+//	            }
+//
+//	            Integer playerNum = data.get("playerNum") != null ? Integer.parseInt(data.get("playerNum").toString()) : null;
+//	            String character = data.get("character") != null ? data.get("character").toString() : null;
+//	            String roomName = data.get("currRoom") != null ? data.get("currRoom").toString() : null;
+//	            Room currRoom = roomName != null ? new Room(roomName) : null; // Convert the string data into a Room object
+//	            Boolean isEliminated = data.get("isEliminated") != null ? Boolean.parseBoolean(data.get("isEliminated").toString()) : null;
+//	            ArrayList<String> knownWeapons = data.get("knownWeapons") != null ? (ArrayList<String>) data.get("knownWeapons") : null;
+//	            ArrayList<String> knownCharacters = data.get("knownCharacters") != null ? (ArrayList<String>) data.get("knownCharacters") : null;
+//	            ArrayList<String> knownRooms = data.get("knownRooms") != null ? (ArrayList<String>) data.get("knownRooms") : null;
+//
+//	            if (playerNum != null && character != null && currRoom != null && isEliminated != null && knownWeapons != null && knownCharacters != null && knownRooms != null) {
+//	                currentPlayer = new Player(playerNum, character);
+//	                currentPlayer.currRoom = currRoom;
+//	                currentPlayer.isEliminated = isEliminated;
+//	                currentPlayer.knownWeapons = knownWeapons;
+//	                currentPlayer.knownCharacters = knownCharacters;
+//	                currentPlayer.knownRooms = knownRooms;
+//	            }
+//	        }
+//	    } catch (InterruptedException | ExecutionException e) {
+//	        e.printStackTrace();
+//	    }
+//
+//	    return currentPlayer;
+//	}
+	
+	// New version of getCurrentPlayer()
 	public static Player getCurrentPlayer() {
-	    DocumentReference docRef = db.collection("game").document("currentPlayer");
-	    ApiFuture<DocumentSnapshot> future = docRef.get();
-	    Player currentPlayer = null;
-
 	    try {
-	        DocumentSnapshot document = future.get();
-	        if (document.exists()) {
-	            Map<String, Object> data = document.getData();
-	            if (data == null) {
-	                return null;
+	        // Get the current player number from the server
+	        DocumentReference currentPlayerNumDocRef = db.collection("game").document("currentPlayerNum");
+	        ApiFuture<DocumentSnapshot> currentPlayerNumFuture = currentPlayerNumDocRef.get();
+	        DocumentSnapshot currentPlayerNumSnapshot = currentPlayerNumFuture.get();
+	        int currentPlayerNum = currentPlayerNumSnapshot.getLong("playerNum").intValue();
+
+	        // Get the player data for the current player number
+	        DocumentReference playerDocRef = db.collection("players").document(Integer.toString(currentPlayerNum));
+	        ApiFuture<DocumentSnapshot> playerFuture = playerDocRef.get();
+	        DocumentSnapshot playerSnapshot = playerFuture.get();
+
+	        if (playerSnapshot.exists()) {
+	            Player player = new Player();
+	            player.playerNum = currentPlayerNum;
+	            player.character = playerSnapshot.getString("character");
+	            player.isEliminated = playerSnapshot.getBoolean("isEliminated");
+	            player.knownWeapons = (ArrayList<String>) playerSnapshot.get("knownWeapons");
+	            player.knownCharacters = (ArrayList<String>) playerSnapshot.get("knownCharacters");
+	            player.knownRooms = (ArrayList<String>) playerSnapshot.get("knownRooms");
+
+	            String roomName = playerSnapshot.getString("currRoom");
+	            if (roomName != null) {
+	                player.currRoom = new Room(roomName);
 	            }
 
-	            Integer playerNum = data.get("playerNum") != null ? Integer.parseInt(data.get("playerNum").toString()) : null;
-	            String character = data.get("character") != null ? data.get("character").toString() : null;
-	            String roomName = data.get("currRoom") != null ? data.get("currRoom").toString() : null;
-	            Room currRoom = roomName != null ? new Room(roomName) : null; // Convert the string data into a Room object
-	            Boolean isEliminated = data.get("isEliminated") != null ? Boolean.parseBoolean(data.get("isEliminated").toString()) : null;
-	            ArrayList<String> knownWeapons = data.get("knownWeapons") != null ? (ArrayList<String>) data.get("knownWeapons") : null;
-	            ArrayList<String> knownCharacters = data.get("knownCharacters") != null ? (ArrayList<String>) data.get("knownCharacters") : null;
-	            ArrayList<String> knownRooms = data.get("knownRooms") != null ? (ArrayList<String>) data.get("knownRooms") : null;
-
-	            if (playerNum != null && character != null && currRoom != null && isEliminated != null && knownWeapons != null && knownCharacters != null && knownRooms != null) {
-	                currentPlayer = new Player(playerNum, character);
-	                currentPlayer.currRoom = currRoom;
-	                currentPlayer.isEliminated = isEliminated;
-	                currentPlayer.knownWeapons = knownWeapons;
-	                currentPlayer.knownCharacters = knownCharacters;
-	                currentPlayer.knownRooms = knownRooms;
-	            }
+	            return player;
+	        } else {
+	            return null;
 	        }
 	    } catch (InterruptedException | ExecutionException e) {
 	        e.printStackTrace();
+	        return null;
 	    }
-
-	    return currentPlayer;
 	}
 	
 	// Start the game for everyone, only to be called by player 0
@@ -450,11 +488,8 @@ public class Server {
         // Assign to FireStore database
         db = FirestoreClient.getFirestore();
         
-<<<<<<< HEAD
+
 //        resetGame();
-=======
-        // resetGame();
->>>>>>> 8340f72011ff26f7e7374b973fda0a2f6d993163
         
 		
 		
