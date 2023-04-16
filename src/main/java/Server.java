@@ -458,7 +458,7 @@ public class Server {
         db = FirestoreClient.getFirestore();
         
 
-        // resetGame();
+        resetGame();
         
 		
 		
@@ -603,7 +603,11 @@ public class Server {
             		gb.constructBoardWithStartAreas();
             	}
             	else {
-            		gb.constructBoard();
+					//Needs to be fixed so chosenCharacters is the correct list of players in the game
+					//For testing manually add characters to list below
+					chosenCharacters.add("Professor Plum");
+					gb.contructBoardWithPlayers(getAllPlayerLocations(), chosenCharacters);
+            		//gb.constructBoard();
             	}
             	
             	
