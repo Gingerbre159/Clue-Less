@@ -587,7 +587,7 @@ public class Server {
         
         
         /*Begin while loop, this breaks when game ends*/
-        while(tm.getCurrentTurn()<5 && !gm.winCondition) {
+        while(tm.getCurrentTurn()<3 && !gm.winCondition) {
         	
         	
         	/*Check if it is the player's turn and they are not eliminated*/
@@ -715,6 +715,7 @@ public class Server {
         		try {
                     // Sleep for a short time to allow turn to update
                     Thread.sleep(500);
+                    tm.setCurrentTurn(getCurrentTurn());
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
