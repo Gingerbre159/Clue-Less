@@ -501,7 +501,7 @@ public class Server {
         // Add player to game
         initializePlayer(numPlayers);
         addPlayer(player);
-        System.out.println("Great! You are player: " + (numPlayers + 1));
+        System.out.println("Great! You are player: " + (player.playerNum + 1));
         
         // Handle start game condition
         if(player.playerNum == 0) {
@@ -535,6 +535,7 @@ public class Server {
         }
         
         // Output data to player and assign their choice to the player
+        System.out.println("You are player: " + (player.playerNum + 1));
         System.out.println("You have chosen: " + answer);
         chooseCharacter(answer);
         player.currRoom = new Room(getStartArea(player));
@@ -587,7 +588,7 @@ public class Server {
         
         
         /*Begin while loop, this breaks when game ends*/
-        while(tm.getCurrentTurn()<3 && !gm.winCondition) {
+        while(tm.getCurrentTurn()<(numPlayers*3) && !gm.winCondition) {
         	
         	
         	/*Check if it is the player's turn and they are not eliminated*/
