@@ -474,7 +474,7 @@ public class Server {
         
         /**Initialize FireBase Admin SDK**/
         try {
-            FileInputStream serviceAccount = new FileInputStream("C:\\Users\\riley\\OneDrive\\Documents\\ClueLessStuff\\clue-less-fa80b-firebase-adminsdk-x4xvz-a05c14518c.json");
+            FileInputStream serviceAccount = new FileInputStream(gm.fs_service_account);
             FirebaseOptions options = FirebaseOptions.builder()
                 .setCredentials(GoogleCredentials.fromStream(serviceAccount))
                 .setDatabaseUrl("https://clue-less-fa80b.firebaseio.com")
@@ -489,7 +489,7 @@ public class Server {
         db = FirestoreClient.getFirestore();
         
 
-//        resetGame();
+        resetGame();
         
 		
 		

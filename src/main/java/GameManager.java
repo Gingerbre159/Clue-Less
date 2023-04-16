@@ -2,6 +2,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class GameManager {
+	
+	/***FireStore Service Account***/
+	public String fs_service_account = "C:\\Users\\riley\\OneDrive\\Documents\\ClueLessStuff\\clue-less-fa80b-firebase-adminsdk-x4xvz-a05c14518c.json";
 
 	/***Variables***/
 	private String[] weaponsArray = {
