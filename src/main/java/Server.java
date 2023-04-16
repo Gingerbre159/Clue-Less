@@ -450,8 +450,14 @@ public class Server {
         // Assign to FireStore database
         db = FirestoreClient.getFirestore();
         
+<<<<<<< HEAD
 //        resetGame();
+=======
+        // resetGame();
+>>>>>>> 8340f72011ff26f7e7374b973fda0a2f6d993163
         
+		
+		
         /**PreGame**/
         
         
