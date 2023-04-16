@@ -284,18 +284,26 @@ public class Server {
 	
 	// Delete all player and turn data from the server to reset the game state
 	public static void resetGame() {
-	    ApiFuture<QuerySnapshot> futurePlayers = db.collection("players").get();
-	    ApiFuture<WriteResult> futureTurn = db.collection("game").document("currentTurn").delete();
+	    // Get a reference to the game collection
+	    CollectionReference gameRef = db.collection("game");
+	    ApiFuture<QuerySnapshot> gameFuture = gameRef.get();
+
+	    // Reset the players data
+	    CollectionReference playersRef = db.collection("players");
+	    ApiFuture<QuerySnapshot> playersFuture = playersRef.get();
 
 	    try {
-	        // Delete all player documents
-	        List<QueryDocumentSnapshot> playerDocuments = futurePlayers.get().getDocuments();
-	        for (QueryDocumentSnapshot document : playerDocuments) {
-	            document.getReference().delete();
+	        // Delete all documents in the game collection
+	        List<QueryDocumentSnapshot> gameDocuments = gameFuture.get().getDocuments();
+	        for (QueryDocumentSnapshot gameDocument : gameDocuments) {
+	            gameRef.document(gameDocument.getId()).delete();
 	        }
 
-	        // Delete current turn document
-	        futureTurn.get();
+	        // Delete all documents in the players collection
+	        List<QueryDocumentSnapshot> playerDocuments = playersFuture.get().getDocuments();
+	        for (QueryDocumentSnapshot playerDocument : playerDocuments) {
+	            playersRef.document(playerDocument.getId()).delete();
+	        }
 	    } catch (InterruptedException | ExecutionException e) {
 	        e.printStackTrace();
 	    }
@@ -322,53 +330,14 @@ public class Server {
 	    docRef.set(Collections.singletonMap("playerNum", currentPlayer.playerNum));
 	}
 	
-	// Get the current player from FireStore
-//	public static Player getCurrentPlayer() {
-//	    DocumentReference docRef = db.collection("game").document("currentPlayer");
-//	    ApiFuture<DocumentSnapshot> future = docRef.get();
-//	    Player currentPlayer = null;
-//
-//	    try {
-//	        DocumentSnapshot document = future.get();
-//	        if (document.exists()) {
-//	            Map<String, Object> data = document.getData();
-//	            if (data == null) {
-//	                return null;
-//	            }
-//
-//	            Integer playerNum = data.get("playerNum") != null ? Integer.parseInt(data.get("playerNum").toString()) : null;
-//	            String character = data.get("character") != null ? data.get("character").toString() : null;
-//	            String roomName = data.get("currRoom") != null ? data.get("currRoom").toString() : null;
-//	            Room currRoom = roomName != null ? new Room(roomName) : null; // Convert the string data into a Room object
-//	            Boolean isEliminated = data.get("isEliminated") != null ? Boolean.parseBoolean(data.get("isEliminated").toString()) : null;
-//	            ArrayList<String> knownWeapons = data.get("knownWeapons") != null ? (ArrayList<String>) data.get("knownWeapons") : null;
-//	            ArrayList<String> knownCharacters = data.get("knownCharacters") != null ? (ArrayList<String>) data.get("knownCharacters") : null;
-//	            ArrayList<String> knownRooms = data.get("knownRooms") != null ? (ArrayList<String>) data.get("knownRooms") : null;
-//
-//	            if (playerNum != null && character != null && currRoom != null && isEliminated != null && knownWeapons != null && knownCharacters != null && knownRooms != null) {
-//	                currentPlayer = new Player(playerNum, character);
-//	                currentPlayer.currRoom = currRoom;
-//	                currentPlayer.isEliminated = isEliminated;
-//	                currentPlayer.knownWeapons = knownWeapons;
-//	                currentPlayer.knownCharacters = knownCharacters;
-//	                currentPlayer.knownRooms = knownRooms;
-//	            }
-//	        }
-//	    } catch (InterruptedException | ExecutionException e) {
-//	        e.printStackTrace();
-//	    }
-//
-//	    return currentPlayer;
-//	}
-	
 	// New version of getCurrentPlayer()
 	public static Player getCurrentPlayer() {
 	    try {
 	        // Get the current player number from the server
-	        DocumentReference currentPlayerNumDocRef = db.collection("game").document("currentPlayerNum");
+	        DocumentReference currentPlayerNumDocRef = db.collection("game").document("currentPlayer");
 	        ApiFuture<DocumentSnapshot> currentPlayerNumFuture = currentPlayerNumDocRef.get();
 	        DocumentSnapshot currentPlayerNumSnapshot = currentPlayerNumFuture.get();
-	        int currentPlayerNum = currentPlayerNumSnapshot.getLong("playerNum").intValue();
+	        int currentPlayerNum = ((Number) currentPlayerNumSnapshot.get("playerNum")).intValue();
 
 	        // Get the player data for the current player number
 	        DocumentReference playerDocRef = db.collection("players").document(Integer.toString(currentPlayerNum));
@@ -621,8 +590,8 @@ public class Server {
         while(tm.getCurrentTurn()<5 && !gm.winCondition) {
         	
         	
-        	/*Check if it is the player's turn*/
-        	if(tm.getCurrentTurn() % numPlayers == player.playerNum) {
+        	/*Check if it is the player's turn and they are not eliminated*/
+        	if(tm.getCurrentTurn() % numPlayers == player.playerNum && !player.isEliminated) {
         		
         		// Set new current player in server
         		setCurrentPlayer(player);
@@ -725,10 +694,32 @@ public class Server {
                 }
                 
                 
-                /*Next Turn*/
+                /*Next Turn*/                
+                try {
+                    // Sleep for a short time to allow turn to update
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                
                 tm.setCurrentTurn(getCurrentTurn());
+                
                 clearScreen();
             }
+        	
+        	
+        	/*If it is player's turn but they are eliminated*/
+        	else if(tm.getCurrentTurn() % numPlayers == player.playerNum && player.isEliminated) {
+        		
+        		setCurrentTurn(getCurrentTurn()+1);
+        		try {
+                    // Sleep for a short time to allow turn to update
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+        		
+        	}
         	
         	
         	/*If it is not the player's turn*/
