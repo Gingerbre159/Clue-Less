@@ -5,18 +5,19 @@ import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
-import com.google.cloud.firestore.WriteResult;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.cloud.FirestoreClient;
 import com.google.auth.oauth2.GoogleCredentials;
+import com.google.common.util.concurrent.MoreExecutors;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -142,6 +143,7 @@ public class Server {
 	static void chooseCharacter(String character) {
 		player.character = character;
 		player.currRoom = new Room(getStartArea(player.character));
+		chosenCharacters.add(character);
 	}
 	
 	// Output available characters for player to choose from
@@ -164,12 +166,12 @@ public class Server {
 		}
 	}
 	
-	// Assign the correct answers that will end the game to the GameManager class
-	static void chooseCorrectAnswers(int randWeaponNum, int randCharacterNum, int randRoomNum) {
-		gm.setCorrectWeapon(gm.getWeaponAt(randWeaponNum));
-		gm.setCorrectCharacter(gm.getCharacterAt(randCharacterNum));
-		gm.setCorrectRoom(gm.getRoomAt(randRoomNum).getName());
-	}
+//	// Assign the correct answers that will end the game to the GameManager class
+//	static void chooseCorrectAnswers(int randWeaponNum, int randCharacterNum, int randRoomNum) {
+//		gm.setCorrectWeapon(gm.getWeaponAt(randWeaponNum));
+//		gm.setCorrectCharacter(gm.getCharacterAt(randCharacterNum));
+//		gm.setCorrectRoom(gm.getRoomAt(randRoomNum).getName());
+//	}
 	
 	// Output the current turn options
 	static void printTurnOptions(ArrayList<String> options) {
@@ -414,6 +416,81 @@ public class Server {
 	    return playerLocations;
 	}
 	
+	// Set the correct weapon, character, and room
+	public static void setSolution(String correctWeapon, String correctCharacter, String correctRoom) {
+	    DocumentReference docRef = db.collection("game").document("correct");
+	    ArrayList<String> solutionData = new ArrayList<>();
+	    solutionData.add(correctWeapon);
+	    solutionData.add(correctCharacter);
+	    solutionData.add(correctRoom);
+	    Map<String, Object> data = new HashMap<>();
+	    data.put("solutionData", solutionData);
+	    docRef.set(data);
+	}
+	
+	// Get the correct weapon, character, and room
+	public static ArrayList<String> getSolution() {
+	    DocumentReference docRef = db.collection("game").document("correct");
+	    CompletableFuture<ArrayList<String>> futureResult = new CompletableFuture<>();
+	    ApiFuture<DocumentSnapshot> future = docRef.get();
+	
+	    future.addListener(() -> {
+	        try {
+	            DocumentSnapshot document = future.get();
+	            if (document.exists()) {
+	                ArrayList<String> solutionData = (ArrayList<String>) document.get("solutionData");
+	                futureResult.complete(solutionData);
+	            } else {
+	                System.out.println("No solution data found");
+	                futureResult.complete(null);
+	            }
+	        } catch (InterruptedException | ExecutionException e) {
+	            e.printStackTrace();
+	            futureResult.completeExceptionally(e);
+	        }
+	    }, MoreExecutors.directExecutor());
+	
+	    ArrayList<String> solutionData = null;
+	    try {
+	        solutionData = futureResult.get();
+	    } catch (InterruptedException | ExecutionException e) {
+	        e.printStackTrace();
+	    }
+	    return solutionData;
+	}
+	
+	// Goes through the players knowns are returns the matching string or the string "none" if there are no matches
+	public static String processSuggestion(int suggestingPlayerNum, String suggestedWeapon, String suggestedCharacter, String suggestedRoom) {
+	    int totalPlayers = getTotalPlayers();
+	    String matchingString = "None";
+	    
+	    for (int i = 0; i < totalPlayers; i++) {
+	        if (i != suggestingPlayerNum) { // Skip the suggesting player
+	            Player currentPlayer = getPlayer(i);
+	            
+	            if (currentPlayer.knownWeapons.contains(suggestedWeapon)) {
+	                matchingString = suggestedWeapon;
+	            } else if (currentPlayer.knownCharacters.contains(suggestedCharacter)) {
+	                matchingString = suggestedCharacter;
+	            } else if (currentPlayer.knownRooms.contains(suggestedRoom)) {
+	                matchingString = suggestedRoom;
+	            }
+	            
+	            if (!matchingString.equals("None")) {
+	                System.out.println("Player " + currentPlayer.character + " knows it cannot be " + matchingString);
+	                break;
+	            }
+	        }
+	    }
+	    
+	    if (matchingString.equals("None")) {
+	        System.out.println("No matches found.");
+	    }
+	    
+	    return matchingString;
+	}
+
+	
 	
 	
 	
@@ -458,7 +535,7 @@ public class Server {
         db = FirestoreClient.getFirestore();
         
 
-        // resetGame();
+//        resetGame();
         
 		
 		
@@ -495,8 +572,8 @@ public class Server {
         	clearScreen();
         }
         
-        // Assign correct answers for the current game if player wants to play
-        chooseCorrectAnswers(randWeaponNum, randCharacterNum, randRoomNum);
+//        // Assign correct answers for the current game if player wants to play
+//        chooseCorrectAnswers(randWeaponNum, randCharacterNum, randRoomNum);
         
         // Add player to game
         initializePlayer(numPlayers);
@@ -507,6 +584,8 @@ public class Server {
         if(player.playerNum == 0) {
         	setGameStarted(false);
         	setCurrentTurn(0);
+        	
+        	setSolution(gm.getWeaponAt(randWeaponNum), gm.getCharacterAt(randCharacterNum), gm.getRoomAt(randRoomNum).getName());
         }
         
         
@@ -540,7 +619,6 @@ public class Server {
         chooseCharacter(answer);
         player.currRoom = new Room(getStartArea(player));
         updatePlayer(player);
-        
         
         /*Wait to start the game*/
         
@@ -583,6 +661,10 @@ public class Server {
         // Set required starting variables
         numPlayers = getTotalPlayers();
         tm.setNumPlayers(numPlayers);
+        ArrayList<String> correct = getSolution();
+        gm.setCorrectWeapon(correct.get(0));
+        gm.setCorrectCharacter(correct.get(1));
+        gm.setCorrectRoom(correct.get(2));
         assignStartKnowledge();
         updatePlayer(player);
         
@@ -603,7 +685,8 @@ public class Server {
             		gb.constructBoardWithStartAreas();
             	}
             	else {
-            		gb.constructBoard();
+					gb.contructBoardWithPlayers(getAllPlayerLocations(), chosenCharacters);
+            		//gb.constructBoard();
             	}
             	
             	
@@ -671,30 +754,33 @@ public class Server {
                 
                 /*Handle Suggestion*/
                 else if(answer.equals("Suggestion")) {
-                    System.out.println("Choose a suspect: ");
-                    String suspect = sc.nextLine();
-                   
-                    System.out.println("Choose a weapon: ");
+                	
+                	// Gather Suggestion
+                	System.out.println("Choose a weapon: ");
                     String weapon = sc.nextLine();
-                   
-                    System.out.println("The suggestion: Crime was committed in the " + player.currRoom.getName() + " by " + suspect + " with the " + weapon);
-    		     
-    		//assume that player number X made the suggestion
-                    //ask player #X+1 if they have the suspect or weapon or room that was suggested
-                    //if(player #X+1 has either the suspect or weapon or room suggested)
-                    //   player #X+1 reveals one of those cards to player X
-                    //   game continues as usual. It is the next player's turn to make a play
-                    //else
-                    //   ask player #X+2 if they have the suspect or weapon or room that was suggested
-                    //   if(player #X+2 has either the suspect or weapon or room suggested)
-                    //       player #X+2 reveals one of those cards to player X
-                    //       game continues as usual. It is the next player's turn to make a play
-                    //until someone shows a card, keep repeating the logic in the else statement by asking the other players if they have any of the cards
-                    //if no player has any of the suggested cards, the turn is over for player X. game continues as usual. It is the next player's turn to make a play
-    		     
+                    System.out.println("Choose a character: ");
+                    String character = sc.nextLine();
+                    System.out.println("The suggestion: Crime was committed in the " + player.currRoom.getName() + " by " + character + " with the " + weapon);
+                    
+                    // Check suggestion
+                    String matchingString = processSuggestion(player.playerNum, weapon, character, player.currRoom.getName());
+                    
+                    // Assign new knowledge
+                    if(gm.weaponsListContains(matchingString)) {
+                    	player.knownWeapons.add(matchingString);
+                    }
+                    else if(gm.charactersListContains(matchingString)) {
+                    	player.knownCharacters.add(matchingString);
+                    }
+                    else if(gm.roomsListContains(matchingString)) {
+                    	player.knownRooms.add(matchingString);
+                    }
+                    
+                    // Update new info to server and move to next turn
+                    updatePlayer(player);
+                	setCurrentTurn(getCurrentTurn()+1);
                 }
-                
-                
+                    
                 /*Next Turn*/                
                 try {
                     // Sleep for a short time to allow turn to update

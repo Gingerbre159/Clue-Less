@@ -25,6 +25,9 @@ dependencies {
     // Firebase dependencies. This is the logger for that to allow for 
     // logging and debugging
     implementation 'ch.qos.logback:logback-classic:1.2.9'
+
+    // Making sure certain functions wait for the return before moving on
+    implementation 'com.google.guava:guava:30.1-jre'
 }
 
 java {
