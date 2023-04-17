@@ -805,6 +805,7 @@ public class Server {
                     // If player accuses correctly
                     if (gm.accusation(weapon, character, room)) {
                     	gm.winCondition = true;
+                    	setWinCondition(gm.winCondition);
                     }
                     
                     // If player is wrong
