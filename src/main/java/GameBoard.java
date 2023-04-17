@@ -16,7 +16,11 @@ public class GameBoard {
         
         for(int i = 0; i < abr.length; i++) {
             String room = gm.getRoomAt(i).getName();
+<<<<<<< HEAD
             abr[i] = room.substring(0, 3);
+=======
+            abr[i] = room.substring(0, 4);
+>>>>>>> 139b2f698d5506ddd3fb541c4370b1173033cd27
         }
     }
     /* method to print out a player's first two letters of their name in the room corresponding to abr[i] 
@@ -113,7 +117,11 @@ public class GameBoard {
 		formatLocs(pLocations, pNames);
         System.out.println("              +----------+       +----------+       +----------+");
         System.out.println("              |          |-------|          |-------|          |");
+<<<<<<< HEAD
         System.out.println("              |   " + abr[0] +   "    |       |   " + abr[1] +   "    |       |   " + abr[2] +   "    |");
+=======
+        System.out.println("              |  " + abr[0] +   "    |       |  " + abr[1] +   "    |       |  " + abr[2] +   "    |");
+>>>>>>> 139b2f698d5506ddd3fb541c4370b1173033cd27
         System.out.print("              |  ");
         printPlayer(0);
         System.out.print("  |       |  ");
@@ -128,7 +136,11 @@ public class GameBoard {
         System.out.println("                  |   |              |   |              |   |");
         System.out.println("              +----------+       +----------+       +----------+");
         System.out.println("              |          |-------|          |-------|          |");
+<<<<<<< HEAD
         System.out.println("              |   " + abr[3]   + "    |       |   " + abr[4] +   "    |       |   " + abr[5] +   "    |"); 
+=======
+        System.out.println("              |  " + abr[3]   + "    |       |  " + abr[4] +   "    |       |  " + abr[5] +   "    |"); 
+>>>>>>> 139b2f698d5506ddd3fb541c4370b1173033cd27
         System.out.print("              |  ");
         printPlayer(3);
         System.out.print("  |       |  ");
@@ -143,7 +155,11 @@ public class GameBoard {
         System.out.println("                  |   |              |   |              |   |  ");
         System.out.println("              +----------+       +----------+       +----------+");
         System.out.println("              |          |-------|          |-------|          |");
+<<<<<<< HEAD
         System.out.println("              |   " + abr[6] +   "    |       |   " + abr[7] +   "    |       |   " + abr[8] +   "    |");
+=======
+        System.out.println("              |  " + abr[6] +   "    |       |  " + abr[7] +   "    |       |  " + abr[8] +   "    |");
+>>>>>>> 139b2f698d5506ddd3fb541c4370b1173033cd27
         System.out.print("              |  ");
         printPlayer(6);
         System.out.print("  |       |  ");

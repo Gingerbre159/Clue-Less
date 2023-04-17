@@ -4,7 +4,11 @@ import java.util.Arrays;
 public class GameManager {
 	
 	/***FireStore Service Account***/
+<<<<<<< HEAD
 	public String fs_service_account = "Your service account file goes here";
+=======
+	public String fs_service_account = "/Users/amberhamelin/Documents/clue-less-fa80b-firebase-adminsdk-x4xvz-5a7a55e5c1.json";
+>>>>>>> 139b2f698d5506ddd3fb541c4370b1173033cd27
 
 	/***Variables***/
 	private String[] weaponsArray = {

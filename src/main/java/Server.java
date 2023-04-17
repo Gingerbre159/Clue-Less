@@ -535,7 +535,11 @@ public class Server {
         db = FirestoreClient.getFirestore();
         
 
+<<<<<<< HEAD
 //        resetGame();
+=======
+        resetGame();
+>>>>>>> 139b2f698d5506ddd3fb541c4370b1173033cd27
         
 		
 		
