@@ -64,8 +64,8 @@ public class TurnManager {
 			// for each adjacent room to the player's current room
 			for(int i = 0; i < currRoom.getAdjRoomNames().size(); i++) {
 				
-				// if the room is unoccupied, add it to move options
-				if(!occupied.contains(currRoom.getAdjRooms().get(i).getName())) {
+				// if the room/hallway is unoccupied or is a room, add it to move options
+				if(!occupied.contains(currRoom.getAdjRooms().get(i).getName()) || gm.roomsListContains(currRoom.getAdjRooms().get(i).getName())) {
 					options.add(currRoom.getAdjRooms().get(i).getName());
 				}
 			}

@@ -791,11 +791,26 @@ public class Server {
                 /*Handle Suggestion*/
                 else if(answer.equals("Suggestion")) {
                 	
-                	// Gather Suggestion
+                	/*Weapon*/
                 	System.out.println("Choose a weapon: ");
                     String weapon = sc.nextLine();
+                    
+                    // Handle incorrect responses
+                	while(!gm.getWeapons().contains(answer)) {
+                		System.out.println("Sorry, that was not one of the possible choices, please try again");
+                		answer = sc.nextLine();
+                	}
+                    
+                	/*Character*/
                     System.out.println("Choose a character: ");
                     String character = sc.nextLine();
+                    
+                    // Handle incorrect responses
+                	while(!gm.getCharacters().contains(answer)) {
+                		System.out.println("Sorry, that was not one of the possible choices, please try again");
+                		answer = sc.nextLine();
+                	}
+                    
                     System.out.println("The suggestion: Crime was committed in the " + player.currRoom.getName() + " by " + character + " with the " + weapon);
                     
                     // Check suggestion
@@ -870,6 +885,9 @@ public class Server {
         
         // Delete data to reset game when player 0 finishes game
         if(player.playerNum == 0) {
+        	System.out.println("End Game?");
+            answer = sc.nextLine();
+        	
         	resetGame();
         }
         
