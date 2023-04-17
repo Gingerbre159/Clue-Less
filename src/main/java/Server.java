@@ -166,13 +166,6 @@ public class Server {
 		}
 	}
 	
-//	// Assign the correct answers that will end the game to the GameManager class
-//	static void chooseCorrectAnswers(int randWeaponNum, int randCharacterNum, int randRoomNum) {
-//		gm.setCorrectWeapon(gm.getWeaponAt(randWeaponNum));
-//		gm.setCorrectCharacter(gm.getCharacterAt(randCharacterNum));
-//		gm.setCorrectRoom(gm.getRoomAt(randRoomNum).getName());
-//	}
-	
 	// Output the current turn options
 	static void printTurnOptions(ArrayList<String> options) {
 		for(int i = 0; i < options.size(); i++) {
@@ -708,8 +701,20 @@ public class Server {
                 /*Handle Move*/
                 if(answer.equals("Move")) {
                 	System.out.println("Where would you like to move?");
-                	printMoveOptions(tm.getMoveOptions(player.currRoom, gm));
+                	
+                	// Gather turn options and output to player
+                	ArrayList<String> moveOptions = tm.getMoveOptions(player.currRoom, gm, getAllPlayerLocations());
+                	printMoveOptions(moveOptions);
                 	answer = sc.nextLine();
+                	
+                	// Handle incorrect responses
+                	while(!moveOptions.contains(answer)) {
+                		System.out.println("Sorry, that was not one of the possible choices");
+                		printMoveOptions(moveOptions);
+                		answer = sc.nextLine();
+                	}
+                	
+                	// Output result and update
                     System.out.println(divider);
                     move(answer);
                     updatePlayer(player);
@@ -719,12 +724,15 @@ public class Server {
                 
                 /*Handle Accusation*/
                 else if(answer.equals("Accusation")) {
+                	System.out.println(gm.getCharacters());
                     System.out.println("The accused suspect: ");
                     String character = sc.nextLine();
-                   
+                    
+                    System.out.println(gm.getRoomNames());
                     System.out.println("The room where the crime occured: ");
                     String room = sc.nextLine();
-                   
+                    
+                    System.out.println(gm.getWeapons());
                     System.out.println("The weapon used during the crime: ");
                     String weapon = sc.nextLine();
                 

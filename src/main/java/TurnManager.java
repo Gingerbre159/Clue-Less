@@ -50,7 +50,7 @@ public class TurnManager {
 		return options;
 	}
 	
-	ArrayList<String> getMoveOptions(Room currRoom, GameManager gm) {
+	ArrayList<String> getMoveOptions(Room currRoom, GameManager gm, ArrayList<String> occupied) {
 		ArrayList<String> options = new ArrayList<>();
 		
 		// if player is in start area, add appropriate hallway to move options
@@ -60,7 +60,15 @@ public class TurnManager {
 		
 		// if player is in a room or hallway, add adjacent rooms/hallways to move options
 		if(gm.roomsListContains(currRoom.getName()) || gm.hallwaysListContains(currRoom.getName())) {
-			options.addAll(currRoom.getAdjRoomNames());
+			
+			// for each adjacent room to the player's current room
+			for(int i = 0; i < currRoom.getAdjRoomNames().size(); i++) {
+				
+				// if the room is unoccupied, add it to move options
+				if(!occupied.contains(currRoom.getAdjRooms().get(i).getName())) {
+					options.add(currRoom.getAdjRooms().get(i).getName());
+				}
+			}
 		}
 		
 		return options;

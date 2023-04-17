@@ -4,7 +4,7 @@ import java.util.Arrays;
 public class GameManager {
 	
 	/***FireStore Service Account***/
-	public String fs_service_account = "Put your service account file path here";
+	public String fs_service_account = "Put your service file path here";
 
 	/***Variables***/
 	private String[] weaponsArray = {
@@ -53,6 +53,7 @@ public class GameManager {
 	
 	private ArrayList<String> weapons = new ArrayList<>(Arrays.asList(weaponsArray));
 	private ArrayList<String> characters = new ArrayList<>(Arrays.asList(charactersArray));
+	private ArrayList<String> roomNames = new ArrayList<>(Arrays.asList(roomNamesArray));
 	
 	private static String correctWeapon;
 	private static String correctCharacter;
@@ -248,6 +249,22 @@ public class GameManager {
 	
 	
 	/**Getters**/
+	ArrayList<String> getWeapons() {
+		return weapons;
+	}
+	
+	ArrayList<String> getCharacters() {
+		return characters;
+	}
+	
+	ArrayList<Room> getRooms() {
+		return rooms;
+	}
+	
+	ArrayList<String> getRoomNames(){
+		return roomNames;
+	}
+	
 	String getWeaponAt(int weaponNum) {
 		return weapons.get(weaponNum);
 	}
