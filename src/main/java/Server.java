@@ -401,6 +401,26 @@ public class Server {
 	    return playerLocations;
 	}
 	
+	// Get a list of all chosen characters
+	public static ArrayList<String> getAllChosenCharacters() {
+	    CollectionReference playersRef = db.collection("players");
+	    ApiFuture<QuerySnapshot> future = playersRef.get();
+	    ArrayList<String> chosenCharacters = new ArrayList<>();
+
+	    try {
+	        List<QueryDocumentSnapshot> documents = future.get().getDocuments();
+	        for (QueryDocumentSnapshot document : documents) {
+	            Map<String, Object> data = document.getData();
+	            String character = data.get("character").toString();
+	            chosenCharacters.add(character);
+	        }
+	    } catch (InterruptedException | ExecutionException e) {
+	        e.printStackTrace();
+	    }
+
+	    return chosenCharacters;
+	}
+	
 	// Set the correct weapon, character, and room
 	public static void setSolution(String correctWeapon, String correctCharacter, String correctRoom) {
 	    DocumentReference docRef = db.collection("game").document("correct");
@@ -520,7 +540,7 @@ public class Server {
         db = FirestoreClient.getFirestore();
         
 
-//        resetGame();
+        resetGame();
         
 		
 		
@@ -652,6 +672,7 @@ public class Server {
         gm.setCorrectRoom(correct.get(2));
         assignStartKnowledge();
         updatePlayer(player);
+        chosenCharacters = getAllChosenCharacters();
         
         
         /*Begin while loop, this breaks when game ends*/
