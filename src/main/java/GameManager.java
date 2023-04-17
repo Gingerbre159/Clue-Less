@@ -4,7 +4,7 @@ import java.util.Arrays;
 public class GameManager {
 	
 	/***FireStore Service Account***/
-	public String fs_service_account = "Your service account file goes here";
+	public String fs_service_account = "Put your service account file path here";
 
 	/***Variables***/
 	private String[] weaponsArray = {
@@ -84,11 +84,14 @@ public class GameManager {
 		}
 		
 		
-		// Attach adjacent rooms
+		/*Attach adjacent rooms*/
+		
+		// Attach to rooms
 		for(int i = 0; i < this.rooms.size(); i++) {
 			Room room = this.rooms.get(i);
 			String roomName = room.getName();
 			
+			// Attach hallways to rooms
 			for(int j = 0; j < this.hallways.size(); j++) {
 				
 				Room hallway = this.hallways.get(j);
@@ -102,9 +105,26 @@ public class GameManager {
 				
 			}
 			
+			// Attach secret passage rooms to rooms
+			if(room.hasSecretPassage()) {
+				if(i == 0) {
+					room.appendAdjRoom(rooms.get(8));
+				}
+				else if(i == 2) {
+					room.appendAdjRoom(rooms.get(6));
+				}
+				else if(i == 6) {
+					room.appendAdjRoom(rooms.get(2));
+				}
+				else if(i == 8) {
+					room.appendAdjRoom(rooms.get(0));
+				}
+			}
+			
 			this.rooms.set(i, room);
 		}
 		
+		// Attach to hallways
 		for(int i = 0; i < this.hallways.size(); i++) {
 			Room hallway = this.hallways.get(i);
 			
@@ -170,15 +190,64 @@ public class GameManager {
         }
 	}
 	
-//	void printWeaponsUnknown(ArrayList<String> knownWeapons) {
-//		ArrayList<String> output = new ArrayList<>();
-//		
-//		for(int i = 0; i < )
-//		
-//		System.out.println();
-//	}
+	// Output block of text for player knowns
+	void printKnowns(Player player) {
+		System.out.println("You know the following cannot be guilty:");
+		System.out.println("	Weapons:" + player.knownWeapons);
+		System.out.println("	Characters:" + player.knownCharacters);
+		System.out.println("	Rooms:" + player.knownRooms);
+	}
 	
-	// Getters
+	// Output block of text for player unknowns
+	void printUnknowns(Player player) {
+		System.out.println("You do not know if the following are guilty:");
+		printWeaponsUnknown(player.knownWeapons);
+		printCharactersUnknown(player.knownCharacters);
+		printRoomsUnknown(player.knownRooms);
+	}
+	
+	// Output unknown weapons to the console
+	private void printWeaponsUnknown(ArrayList<String> knownWeapons) {
+		ArrayList<String> output = new ArrayList<>();
+		
+		for(int i = 0; i < weapons.size(); i++) {
+			if(!knownWeapons.contains(weapons.get(i))) {
+				output.add(weapons.get(i));
+			}
+		}
+		
+		System.out.println("	Weapons:" + output);
+	}
+	
+	// Output unknown characters to the console
+	private void printCharactersUnknown(ArrayList<String> knownCharacters) {
+		ArrayList<String> output = new ArrayList<>();
+		
+		for(int i = 0; i < characters.size(); i++) {
+			if(!knownCharacters.contains(characters.get(i))) {
+				output.add(characters.get(i));
+			}
+		}
+		
+		System.out.println("	Characters:" + output);
+	}
+	
+	// Output unknown rooms to the console
+	private void printRoomsUnknown(ArrayList<String> knownRooms) {
+		ArrayList<String> output = new ArrayList<>();
+		
+		for(int i = 0; i < rooms.size(); i++) {
+			if(!knownRooms.contains(rooms.get(i).getName())) {
+				output.add(rooms.get(i).getName());
+			}
+		}
+		
+		System.out.println("	Rooms:" + output);
+	}
+	
+	
+	
+	/**Getters**/
 	String getWeaponAt(int weaponNum) {
 		return weapons.get(weaponNum);
 	}
@@ -237,7 +306,9 @@ public class GameManager {
 		return correctRoom;
 	}
 	
-	// Setters
+	
+	
+	/**Setters**/
 	void setCorrectWeapon(String weapon) {
 		correctWeapon = weapon;
 	}

@@ -193,14 +193,6 @@ public class Server {
 		player.currRoom = room;
 	}
 	
-	// Display current knowledge
-	static void printKnowns() {
-		System.out.println("You know the following cannot be guilty:");
-		System.out.println("	Weapons:" + player.knownWeapons);
-		System.out.println("	Characters:" + player.knownCharacters);
-		System.out.println("	Rooms:" + player.knownRooms);
-	}
-	
 	// Clear the console so it is not so cluttered
 	public static void clearScreen() {
 		for (int i = 0; i < 50; i++) {
@@ -670,7 +662,7 @@ public class Server {
         
         
         /*Begin while loop, this breaks when game ends*/
-        while(tm.getCurrentTurn()<(numPlayers*3) && !gm.winCondition) {
+        while(!gm.winCondition) {
         	
         	
         	/*Check if it is the player's turn and they are not eliminated*/
@@ -695,7 +687,9 @@ public class Server {
             	System.out.println(divider);
             	System.out.println("Current turn: " + (tm.getCurrentTurn()+1));
             	System.out.println();
-            	printKnowns();
+            	gm.printKnowns(player);
+            	System.out.println();
+            	gm.printUnknowns(player);
             	System.out.println();
             	System.out.println("You are in: " + player.currRoom.getName());
                 System.out.println(divider);
