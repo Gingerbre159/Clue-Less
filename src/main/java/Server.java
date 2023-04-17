@@ -507,7 +507,34 @@ public class Server {
 	    
 	    return matchingString;
 	}
+	
+	// Set win condition status
+	public static void setWinCondition(Boolean winCondition) {
+	    DocumentReference docRef = db.collection("game").document("winCondition");
+	    Map<String, Object> data = new HashMap<>();
+	    data.put("value", winCondition);
+	    docRef.set(data);
+	}
+	
+	// Get win condition status
+	public static Boolean getWinCondition() {
+	    DocumentReference docRef = db.collection("game").document("winCondition");
+	    ApiFuture<DocumentSnapshot> future = docRef.get();
+	    Boolean winCondition = null;
 
+	    try {
+	        DocumentSnapshot document = future.get();
+	        if (document.exists()) {
+	        	winCondition = document.getBoolean("value");
+	        } else {
+	            System.out.println("No win condition status document");
+	        }
+	    } catch (InterruptedException | ExecutionException e) {
+	        e.printStackTrace();
+	    }
+
+	    return winCondition;
+	}
 	
 	
 	
@@ -602,6 +629,7 @@ public class Server {
         if(player.playerNum == 0) {
         	setGameStarted(false);
         	setCurrentTurn(0);
+        	setWinCondition(false);
         	
         	setSolution(gm.getWeaponAt(randWeaponNum), gm.getCharacterAt(randCharacterNum), gm.getRoomAt(randRoomNum).getName());
         }
@@ -683,6 +711,7 @@ public class Server {
         gm.setCorrectWeapon(correct.get(0));
         gm.setCorrectCharacter(correct.get(1));
         gm.setCorrectRoom(correct.get(2));
+        gm.winCondition = getWinCondition();
         assignStartKnowledge();
         updatePlayer(player);
         chosenCharacters = getAllChosenCharacters();
@@ -854,6 +883,7 @@ public class Server {
                     // Sleep for a short time to allow turn to update
                     Thread.sleep(500);
                     tm.setCurrentTurn(getCurrentTurn());
+                    gm.winCondition = getWinCondition();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -867,6 +897,7 @@ public class Server {
                     // Sleep for a short time to avoid busy waiting
                     Thread.sleep(500);
                     tm.setCurrentTurn(getCurrentTurn());
+                    gm.winCondition = getWinCondition();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
