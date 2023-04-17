@@ -796,9 +796,9 @@ public class Server {
                     String weapon = sc.nextLine();
                     
                     // Handle incorrect responses
-                	while(!gm.getWeapons().contains(answer)) {
+                	while(!gm.getWeapons().contains(weapon)) {
                 		System.out.println("Sorry, that was not one of the possible choices, please try again");
-                		answer = sc.nextLine();
+                		weapon = sc.nextLine();
                 	}
                     
                 	/*Character*/
@@ -806,9 +806,9 @@ public class Server {
                     String character = sc.nextLine();
                     
                     // Handle incorrect responses
-                	while(!gm.getCharacters().contains(answer)) {
+                	while(!gm.getCharacters().contains(character)) {
                 		System.out.println("Sorry, that was not one of the possible choices, please try again");
-                		answer = sc.nextLine();
+                		character = sc.nextLine();
                 	}
                     
                     System.out.println("The suggestion: Crime was committed in the " + player.currRoom.getName() + " by " + character + " with the " + weapon);
