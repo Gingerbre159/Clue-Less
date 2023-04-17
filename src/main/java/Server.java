@@ -230,6 +230,11 @@ public class Server {
 	        DocumentSnapshot document = future.get();
 	        if (document.exists()) {
 	            player = document.toObject(Player.class);
+	            
+	            // Create a new Room object with the room name and set it as the player's current room
+	            String roomName = document.getString("currRoom");
+	            Room room = new Room(roomName);
+	            player.currRoom = room;
 	        } else {
 	            System.out.println("No such document!");
 	        }
