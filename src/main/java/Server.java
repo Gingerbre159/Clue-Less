@@ -222,19 +222,27 @@ public class Server {
 	
 	// Retrieve player data from FireStore
 	public static Player getPlayer(int playerNum) {
-		DocumentReference docRef = db.collection("players").document(Integer.toString(playerNum));
+	    DocumentReference docRef = db.collection("players").document(Integer.toString(playerNum));
 	    ApiFuture<DocumentSnapshot> future = docRef.get();
 	    Player player = null;
 
 	    try {
 	        DocumentSnapshot document = future.get();
 	        if (document.exists()) {
-	            player = document.toObject(Player.class);
-	            
-	            // Create a new Room object with the room name and set it as the player's current room
-	            String roomName = document.getString("currRoom");
-	            Room room = new Room(roomName);
-	            player.currRoom = room;
+	            int playerNumber = document.getLong("playerNum").intValue();
+	            String character = document.getString("character");
+	            String currRoomName = document.getString("currRoom");
+	            boolean isEliminated = document.getBoolean("isEliminated");
+	            ArrayList<String> knownWeapons = (ArrayList<String>) document.get("knownWeapons");
+	            ArrayList<String> knownCharacters = (ArrayList<String>) document.get("knownCharacters");
+	            ArrayList<String> knownRooms = (ArrayList<String>) document.get("knownRooms");
+
+	            player = new Player(playerNumber, character);
+	            player.currRoom = new Room(currRoomName);
+	            player.isEliminated = isEliminated;
+	            player.knownWeapons = knownWeapons;
+	            player.knownCharacters = knownCharacters;
+	            player.knownRooms = knownRooms;
 	        } else {
 	            System.out.println("No such document!");
 	        }
