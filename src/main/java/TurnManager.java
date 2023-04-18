@@ -41,7 +41,7 @@ public class TurnManager {
 		return "Could not find start hallway";
 	}
 	
-	ArrayList<String> getAdjacentRooms(String currRoom, GameManager gm) {
+	ArrayList<String> getAdjacentRooms(String currRoom) {
 		ArrayList<String> options = new ArrayList<>();
 		String[] temp = currRoom.split("/");
 		options.add(temp[0]);
