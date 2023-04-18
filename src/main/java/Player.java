@@ -20,39 +20,5 @@ public class Player {
 		this.playerNum = playerNum;
 		this.character = character;
 	}
-	
-//	void addKnownWeapon(String weapon) {
-//		this.knownWeapons.add(weapon);
-//	}
-//	
-//	void addKnownCharacter(String character) {
-//		this.knownCharacters.add(character);
-//	}
-//	
-//	void addKnownRoom(String room) {
-//		this.knownRooms.add(room);
-//	}
-	
-	// Getters
-//	int getPlayerNum() {
-//		return this.playerNum;
-//	}
-	
-//	ArrayList<String> getKnownWeapons() {
-//		return this.knownWeapons;
-//	}
-//	
-//	ArrayList<String> getKnownCharacters() {
-//		return this.knownCharacters;
-//	}
-//	
-//	ArrayList<String> getKnownRooms() {
-//		return this.knownRooms;
-//	}
-	
-	// Setters
-//	void setPlayerNum(int playerNum) {
-//		this.playerNum = playerNum;
-//	}
 
 }
