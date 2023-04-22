@@ -129,17 +129,17 @@ public class GameManager {
 		for(int i = 0; i < this.hallways.size(); i++) {
 			Room hallway = this.hallways.get(i);
 			
-			String[] rooms = hallway.getName().split("/");
-			Room temp = new Room(rooms[0]);
+			String[] tempRooms = hallway.getName().split("/");
+			Room temp = new Room(tempRooms[0]);
 			hallway.appendAdjRoom(temp);
-			temp = new Room(rooms[1]);
+			temp = new Room(tempRooms[1]);
 			hallway.appendAdjRoom(temp);
 			
 			this.hallways.set(i, hallway);
 		}
 		
 	}
-	
+
 	Boolean accusation(String weapon, String character, String room) {
 		if(weapon.equals(correctWeapon) && character.equals(correctCharacter) && room.equals(correctRoom)) {
 			return true;
@@ -326,15 +326,15 @@ public class GameManager {
 	
 	
 	/**Setters**/
-	void setCorrectWeapon(String weapon) {
+	static void setCorrectWeapon(String weapon) {
 		correctWeapon = weapon;
 	}
 	
-	void setCorrectCharacter(String character) {
+	static void setCorrectCharacter(String character) {
 		correctCharacter = character;
 	}
 	
-	void setCorrectRoom(String room) {
+	static void setCorrectRoom(String room) {
 		correctRoom = room;
 	}
 
