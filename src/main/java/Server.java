@@ -331,9 +331,9 @@ public class Server {
 	}
 	
 	// Set the current player in FireStore
-	public static void setCurrentPlayer(Player currentPlayer) {
+	public static void setCurrentPlayer(int currentPlayerNum) {
 	    DocumentReference docRef = db.collection("game").document("currentPlayer");
-	    docRef.set(Collections.singletonMap("playerNum", currentPlayer.playerNum));
+	    docRef.set(Collections.singletonMap("playerNum", currentPlayerNum));
 	}
 	
 	// New version of getCurrentPlayer()
@@ -732,7 +732,7 @@ public class Server {
         	if(tm.getCurrentTurn() % numPlayers == player.playerNum && !player.isEliminated) {
         		
         		// Set new current player in server
-        		setCurrentPlayer(player);
+        		// setCurrentPlayer(player);
             	
             	
             	/*Construct current game board*/
@@ -787,8 +787,6 @@ public class Server {
                 	// Output result and update
                     System.out.println(divider);
                     move(answer);
-                    updatePlayer(player);
-                    setCurrentTurn(getCurrentTurn()+1);
                 }
                 
                 
@@ -823,8 +821,6 @@ public class Server {
 						player.accused.add(character);
 						player.accused.add(room);
                     	eliminatePlayer();
-                    	updatePlayer(player);
-                    	setCurrentTurn(getCurrentTurn()+1);
                     }
                 }
                 
@@ -873,11 +869,13 @@ public class Server {
 					player.accused.add(weapon);
 					player.accused.add(character);
 					player.accused.add(player.currRoom.getName());
-                    updatePlayer(player);
-                	setCurrentTurn(getCurrentTurn()+1);
                 }
                     
-                /*Next Turn*/                
+                /*Next Turn*/   
+				updatePlayer(player);
+				setCurrentTurn(getCurrentTurn()+1);
+				setCurrentPlayer(player.playerNum + 1);
+
                 try {
                     // Sleep for a short time to allow turn to update
                     Thread.sleep(1000);
@@ -915,7 +913,7 @@ public class Server {
 					int tempTurnNum = getCurrentTurn();
 
 					// Check if the current turn has changed meaning it is a new player's turn
-					if(tempTurnNum != tm.getCurrentTurn() && tempTurnNum > 0) {
+					if(tempTurnNum != tm.getCurrentTurn() && tempTurnNum > 1) {
 						Player currPlayer = getCurrentPlayer();
 						Player prevPlayer = getPlayer(currPlayer.playerNum-1);
 
@@ -950,7 +948,7 @@ public class Server {
 					int tempTurnNum = getCurrentTurn();
 
 					// Check if the current turn has changed meaning it is a new player's turn
-					if(tempTurnNum != tm.getCurrentTurn() && tempTurnNum > 0) {
+					if(tempTurnNum != tm.getCurrentTurn() && tempTurnNum > 1) {
 						Player currPlayer = getCurrentPlayer();
 						Player prevPlayer = getPlayer(currPlayer.playerNum-1);
 
