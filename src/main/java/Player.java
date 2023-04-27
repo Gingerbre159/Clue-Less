@@ -7,6 +7,8 @@ public class Player {
 	public String character;
 	public Room currRoom = null;
 	public Boolean isEliminated = false;
+	public String prevTurnChoice = null;
+	public ArrayList<String> accused = new ArrayList<>();
 	public ArrayList<String> knownWeapons = new ArrayList<>();
 	public ArrayList<String> knownCharacters = new ArrayList<>();
 	public ArrayList<String> knownRooms = new ArrayList<>();

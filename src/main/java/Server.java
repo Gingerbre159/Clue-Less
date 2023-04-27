@@ -214,6 +214,8 @@ public class Server {
 	        "character", player.character,
 	        "currRoom", player.currRoom.getName(),
 	        "isEliminated", player.isEliminated,
+			"prevTurnChoice", player.prevTurnChoice,
+			"accused", player.accused,
 	        "knownWeapons", player.knownWeapons,
 	        "knownCharacters", player.knownCharacters,
 	        "knownRooms", player.knownRooms
@@ -233,6 +235,8 @@ public class Server {
 	            String character = document.getString("character");
 	            String currRoomName = document.getString("currRoom");
 	            boolean isEliminated = document.getBoolean("isEliminated");
+				String prevTurnChoice = document.getString("prevTurnChoice");
+				ArrayList<String> accused = (ArrayList<String>) document.get("accused");
 	            ArrayList<String> knownWeapons = (ArrayList<String>) document.get("knownWeapons");
 	            ArrayList<String> knownCharacters = (ArrayList<String>) document.get("knownCharacters");
 	            ArrayList<String> knownRooms = (ArrayList<String>) document.get("knownRooms");
@@ -240,6 +244,8 @@ public class Server {
 	            player = new Player(playerNumber, character);
 	            player.currRoom = new Room(currRoomName);
 	            player.isEliminated = isEliminated;
+				player.prevTurnChoice = prevTurnChoice;
+				player.accused = accused;
 	            player.knownWeapons = knownWeapons;
 	            player.knownCharacters = knownCharacters;
 	            player.knownRooms = knownRooms;
@@ -349,6 +355,8 @@ public class Server {
 	            player.playerNum = currentPlayerNum;
 	            player.character = playerSnapshot.getString("character");
 	            player.isEliminated = playerSnapshot.getBoolean("isEliminated");
+				player.prevTurnChoice = playerSnapshot.getString("prevTurnChoice");
+				player.accused = (ArrayList<String>) playerSnapshot.get("accused");
 	            player.knownWeapons = (ArrayList<String>) playerSnapshot.get("knownWeapons");
 	            player.knownCharacters = (ArrayList<String>) playerSnapshot.get("knownCharacters");
 	            player.knownRooms = (ArrayList<String>) playerSnapshot.get("knownRooms");
@@ -617,9 +625,6 @@ public class Server {
         	clearScreen();
         }
         
-//        // Assign correct answers for the current game if player wants to play
-//        chooseCorrectAnswers(randWeaponNum, randCharacterNum, randRoomNum);
-        
         // Add player to game
         initializePlayer(numPlayers);
         addPlayer(player);
@@ -734,7 +739,6 @@ public class Server {
             	}
             	else {
 					gb.contructBoardWithPlayers(getAllPlayerLocations(), chosenCharacters);
-            		//gb.constructBoard();
             	}
             	
             	
@@ -763,6 +767,7 @@ public class Server {
                 
                 /*Handle Move*/
                 if(answer.equals("Move")) {
+					player.prevTurnChoice = answer;
                 	System.out.println("Where would you like to move?");
                 	
                 	// Gather turn options and output to player
@@ -787,6 +792,7 @@ public class Server {
                 
                 /*Handle Accusation*/
                 else if(answer.equals("Accusation")) {
+					player.prevTurnChoice = answer;
                 	System.out.println(gm.getCharacters());
                     System.out.println("The accused suspect: ");
                     String character = sc.nextLine();
@@ -811,6 +817,9 @@ public class Server {
                     // If player is wrong
                     else {
                     	System.out.println("I'm sorry, that is incorrect. You have been eliminated. You will still participate in suggestions, if chosen");
+						player.accused.add(weapon);
+						player.accused.add(character);
+						player.accused.add(room);
                     	eliminatePlayer();
                     	updatePlayer(player);
                     	setCurrentTurn(getCurrentTurn()+1);
@@ -820,6 +829,7 @@ public class Server {
                 
                 /*Handle Suggestion*/
                 else if(answer.equals("Suggestion")) {
+					player.prevTurnChoice = answer;
                 	
                 	/*Weapon*/
                 	System.out.println("Choose a weapon: ");
@@ -858,6 +868,9 @@ public class Server {
                     }
                     
                     // Update new info to server and move to next turn
+					player.accused.add(weapon);
+					player.accused.add(character);
+					player.accused.add(player.currRoom.getName());
                     updatePlayer(player);
                 	setCurrentTurn(getCurrentTurn()+1);
                 }
@@ -870,9 +883,15 @@ public class Server {
                     e.printStackTrace();
                 }
                 
-                tm.setCurrentTurn(getCurrentTurn());
-                
-                clearScreen();
+                Player currPlayer = getCurrentPlayer();
+				Player prevPlayer = player;
+
+				// Output info to player when it is not their turn and the turn number has changed
+				clearScreen();
+				gm.printNotPlayerTurnInfo(prevPlayer, currPlayer);
+
+				// Update local turn manager
+				tm.setCurrentTurn(getCurrentTurn());
             }
         	
         	
@@ -883,8 +902,29 @@ public class Server {
         		try {
                     // Sleep for a short time to allow turn to update
                     Thread.sleep(500);
-                    tm.setCurrentTurn(getCurrentTurn());
-                    gm.winCondition = getWinCondition();
+
+					// Break loop if winCondition is true, ending game
+					if(getWinCondition()) {
+						gm.winCondition = true;
+						break;
+					}
+
+                    // Get potentially updated variables
+					int tempTurnNum = getCurrentTurn();
+
+					// Check if the current turn has changed meaning it is a new player's turn
+					if(tempTurnNum != tm.getCurrentTurn()) {
+						Player currPlayer = getCurrentPlayer();
+						Player prevPlayer = getPlayer(currPlayer.playerNum-1);
+
+						// Output info to player when it is not their turn and the turn number has changed
+						clearScreen();
+						gm.printNotPlayerTurnInfo(prevPlayer, currPlayer);
+
+						// Update local turn manager
+						tm.setCurrentTurn(tempTurnNum);
+					}
+
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -897,8 +937,28 @@ public class Server {
         		try {
                     // Sleep for a short time to avoid busy waiting
                     Thread.sleep(500);
-                    tm.setCurrentTurn(getCurrentTurn());
-                    gm.winCondition = getWinCondition();
+
+					// Break loop if winCondition is true, ending game
+					if(getWinCondition()) {
+						gm.winCondition = true;
+						break;
+					}
+
+					// Get potentially updated variables
+					int tempTurnNum = getCurrentTurn();
+
+					// Check if the current turn has changed meaning it is a new player's turn
+					if(tempTurnNum != tm.getCurrentTurn()) {
+						Player currPlayer = getCurrentPlayer();
+						Player prevPlayer = getPlayer(currPlayer.playerNum-1);
+
+						// Output info to player when it is not their turn and the turn number has changed
+						gm.printNotPlayerTurnInfo(prevPlayer, currPlayer);
+
+						// Update local turn manager
+						tm.setCurrentTurn(tempTurnNum);
+					}
+                    
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

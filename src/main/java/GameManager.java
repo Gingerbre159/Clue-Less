@@ -245,6 +245,24 @@ public class GameManager {
 		
 		System.out.println("	Rooms:" + output);
 	}
+
+	// Output block of text for current info when not player's turn
+	void printNotPlayerTurnInfo(Player prevPlayer, Player currPlayer) {
+		
+		if(prevPlayer.prevTurnChoice.equals("Move")) {
+			System.out.println(prevPlayer.character + " moved to " + prevPlayer.currRoom);
+		}
+		else if(prevPlayer.prevTurnChoice.equals("Accusation")) {
+			System.out.println(prevPlayer.character + " accused " + prevPlayer.accused.get(1) + " of using " + 
+				prevPlayer.accused.get(0) + " to murder in the " + prevPlayer.accused.get(2));
+		}
+		else if(prevPlayer.prevTurnChoice.equals("Suggestion")) {
+			System.out.println(prevPlayer.character + " suggested " + prevPlayer.accused.get(1) + " of using " + 
+			prevPlayer.accused.get(0) + " to murder in the " + prevPlayer.accused.get(2));
+		}
+
+		System.out.println("It is currently " + currPlayer.character + "'s turn.");
+	}
 	
 	
 	
@@ -326,15 +344,15 @@ public class GameManager {
 	
 	
 	/**Setters**/
-	static void setCorrectWeapon(String weapon) {
+	void setCorrectWeapon(String weapon) {
 		correctWeapon = weapon;
 	}
 	
-	static void setCorrectCharacter(String character) {
+	void setCorrectCharacter(String character) {
 		correctCharacter = character;
 	}
 	
-	static void setCorrectRoom(String room) {
+	void setCorrectRoom(String room) {
 		correctRoom = room;
 	}
 
