@@ -188,7 +188,7 @@ public class Server {
 	
 	// Clear the console so it is not so cluttered
 	public static void clearScreen() {
-		for (int i = 0; i < 50; i++) {
+		for (int i = 0; i < 55; i++) {
 	        System.out.println();
 	    }
     }
@@ -599,7 +599,7 @@ public class Server {
 
 
 
-		
+
 		
 		
         /**PreGame**/
@@ -928,10 +928,10 @@ public class Server {
 						// Output info to player when it is not their turn and the turn number has changed
 						clearScreen();
 						gm.printNotPlayerTurnInfo(prevPlayer, currPlayer);
-
-						// Update local turn manager
-						tm.setCurrentTurn(tempTurnNum);
 					}
+
+					// Update local turn manager
+					tm.setCurrentTurn(tempTurnNum);
 
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -962,10 +962,10 @@ public class Server {
 
 						// Output info to player when it is not their turn and the turn number has changed
 						gm.printNotPlayerTurnInfo(prevPlayer, currPlayer);
-
-						// Update local turn manager
-						tm.setCurrentTurn(tempTurnNum);
 					}
+
+					// Update local turn manager
+					tm.setCurrentTurn(tempTurnNum);
                     
                 } catch (InterruptedException e) {
                     e.printStackTrace();
