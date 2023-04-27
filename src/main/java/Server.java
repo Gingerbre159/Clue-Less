@@ -589,7 +589,7 @@ public class Server {
         
 
 		/**********Reset Button**********/
-        //resetGame();
+        resetGame();
 		/**********Reset Button**********/
         
 		
@@ -915,7 +915,7 @@ public class Server {
 					int tempTurnNum = getCurrentTurn();
 
 					// Check if the current turn has changed meaning it is a new player's turn
-					if(tempTurnNum != tm.getCurrentTurn()) {
+					if(tempTurnNum != tm.getCurrentTurn() && tempTurnNum > 0) {
 						Player currPlayer = getCurrentPlayer();
 						Player prevPlayer = getPlayer(currPlayer.playerNum-1);
 
@@ -950,7 +950,7 @@ public class Server {
 					int tempTurnNum = getCurrentTurn();
 
 					// Check if the current turn has changed meaning it is a new player's turn
-					if(tempTurnNum != tm.getCurrentTurn()) {
+					if(tempTurnNum != tm.getCurrentTurn() && tempTurnNum > 0) {
 						Player currPlayer = getCurrentPlayer();
 						Player prevPlayer = getPlayer(currPlayer.playerNum-1);
 
