@@ -588,10 +588,18 @@ public class Server {
         db = FirestoreClient.getFirestore();
         
 
+
+
+
+
 		/**********Reset Button**********/
         resetGame();
 		/**********Reset Button**********/
         
+
+
+
+		
 		
 		
         /**PreGame**/

@@ -250,7 +250,7 @@ public class GameManager {
 	void printNotPlayerTurnInfo(Player prevPlayer, Player currPlayer) {
 		
 		if(prevPlayer.prevTurnChoice.equals("Move")) {
-			System.out.println(prevPlayer.character + " moved to " + prevPlayer.currRoom);
+			System.out.println(prevPlayer.character + " moved to " + prevPlayer.currRoom.getName());
 		}
 		else if(prevPlayer.prevTurnChoice.equals("Accusation")) {
 			System.out.println(prevPlayer.character + " accused " + prevPlayer.accused.get(1) + " of using " + 
