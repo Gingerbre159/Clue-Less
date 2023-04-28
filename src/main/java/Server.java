@@ -882,7 +882,12 @@ public class Server {
                 /*Next Turn*/   
 				updatePlayer(player);
 				setCurrentTurn(getCurrentTurn()+1);
-				setCurrentPlayer(player.playerNum + 1);
+				if((player.playerNum + 1) >= numPlayers){
+					setCurrentPlayer(0);
+				}
+				else{
+					setCurrentPlayer(player.playerNum + 1);
+				}
 
                 try {
                     // Sleep for a short time to allow turn to update
