@@ -880,31 +880,33 @@ public class Server {
                 }
                     
                 /*Next Turn*/   
-				updatePlayer(player);
-				setCurrentTurn(getCurrentTurn()+1);
-				if((player.playerNum + 1) >= numPlayers){
-					setCurrentPlayer(0);
+				if(!getWinCondition()){
+					updatePlayer(player);
+					setCurrentTurn(getCurrentTurn()+1);
+					if((player.playerNum + 1) >= numPlayers){
+						setCurrentPlayer(0);
+					}
+					else{
+						setCurrentPlayer(player.playerNum + 1);
+					}
+
+					try {
+						// Sleep for a short time to allow turn to update
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					
+					Player currPlayer = getCurrentPlayer();
+					Player prevPlayer = player;
+
+					// Output info to player when it is not their turn and the turn number has changed
+					clearScreen();
+					gm.printNotPlayerTurnInfo(prevPlayer, currPlayer);
+
+					// Update local turn manager
+					tm.setCurrentTurn(getCurrentTurn());
 				}
-				else{
-					setCurrentPlayer(player.playerNum + 1);
-				}
-
-                try {
-                    // Sleep for a short time to allow turn to update
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                
-                Player currPlayer = getCurrentPlayer();
-				Player prevPlayer = player;
-
-				// Output info to player when it is not their turn and the turn number has changed
-				clearScreen();
-				gm.printNotPlayerTurnInfo(prevPlayer, currPlayer);
-
-				// Update local turn manager
-				tm.setCurrentTurn(getCurrentTurn());
             }
         	
         	
@@ -988,11 +990,10 @@ public class Server {
         
         
         /**End Game**/
-        int turnNum = getCurrentTurn();
         Player winner = getCurrentPlayer();
         
         // Display win screen for winner
-        gm.endScreen(turnNum, numPlayers, winner, player.playerNum);
+        gm.endScreen(tm.getCurrentTurn(), numPlayers, winner, player.playerNum);
         
         // Delete data to reset game when player 0 finishes game
         if(player.playerNum == 0) {
