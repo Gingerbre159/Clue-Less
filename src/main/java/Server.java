@@ -928,7 +928,7 @@ public class Server {
 					int tempTurnNum = getCurrentTurn();
 
 					// Check if the current turn has changed meaning it is a new player's turn
-					if(tempTurnNum != tm.getCurrentTurn() && tempTurnNum > 1) {
+					if(tempTurnNum != tm.getCurrentTurn() && tempTurnNum > 0) {
 						Player currPlayer = getCurrentPlayer();
 						Player prevPlayer = getPlayer(currPlayer.playerNum-1);
 
@@ -963,7 +963,7 @@ public class Server {
 					int tempTurnNum = getCurrentTurn();
 
 					// Check if the current turn has changed meaning it is a new player's turn
-					if(tempTurnNum != tm.getCurrentTurn() && tempTurnNum > 1) {
+					if(tempTurnNum != tm.getCurrentTurn() && tempTurnNum > 0) {
 						Player currPlayer = getCurrentPlayer();
 						Player prevPlayer = null;
 						if(currPlayer.playerNum != 0) {
