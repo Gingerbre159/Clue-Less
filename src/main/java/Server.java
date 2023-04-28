@@ -963,7 +963,13 @@ public class Server {
 					// Check if the current turn has changed meaning it is a new player's turn
 					if(tempTurnNum != tm.getCurrentTurn() && tempTurnNum > 1) {
 						Player currPlayer = getCurrentPlayer();
-						Player prevPlayer = getPlayer(currPlayer.playerNum-1);
+						Player prevPlayer = null;
+						if(currPlayer.playerNum != 0) {
+							prevPlayer = getPlayer(currPlayer.playerNum-1);
+						}
+						else{
+							prevPlayer = getPlayer(numPlayers-1);
+						}
 
 						// Output info to player when it is not their turn and the turn number has changed
 						gm.printNotPlayerTurnInfo(prevPlayer, currPlayer);
