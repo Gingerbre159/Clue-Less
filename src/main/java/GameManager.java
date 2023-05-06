@@ -178,14 +178,14 @@ public class GameManager {
 	void endScreen(int turnNum, int numPlayers, Player winner, int playerNum) {
 		// Display win screen for winner
         if(turnNum % numPlayers == playerNum) {
-			System.out.println("                                   .''.       ");
-			System.out.println("       .''.      .        *''*    :_\\/_:     . ");
-			System.out.println("      :_\\/_:   _\\(/_  .:.*_\\/_*   : /\\ :  .'.:.'.");
-			System.out.println("  .''.: /\\ :   ./)\\   ':'* /\\ * :  '..'.  -=:o:=-");
-			System.out.println(" :_\\/_:'.:::.    ' *''*    * '.\\'/.' _\\(/_'.':'.'");
-			System.out.println(" : /\\ : :::::     *_\\/_*     -= o =-  /)\\    '  *");
-			System.out.println("  '..'  ':::'     * /\\ *     .'/.\\'.   '");
-			System.out.println("                   *..*         :");
+		System.out.println("                                   .''.       ");
+		System.out.println("       .''.      .        *''*    :_\\/_:     . ");
+		System.out.println("      :_\\/_:   _\\(/_  .:.*_\\/_*   : /\\ :  .'.:.'.");
+		System.out.println("  .''.: /\\ :   ./)\\   ':'* /\\ * :  '..'.  -=:o:=-");
+		System.out.println(" :_\\/_:'.:::.    ' *''*    * '.\\'/.' _\\(/_'.':'.'");
+		System.out.println(" : /\\ : :::::     *_\\/_*     -= o =-  /)\\    '  *");
+		System.out.println("  '..'  ':::'     * /\\ *     .'/.\\'.   '");
+		System.out.println("                   *..*         :");
 
         	System.out.println("Congrats, you win!");
         }
