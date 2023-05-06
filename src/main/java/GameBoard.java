@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import javax.swing.*;
 
 public class GameBoard {
 
@@ -20,7 +21,20 @@ public class GameBoard {
         "   ",
         "   "
     };
+
+    private String[] weapArrPop = {
+        "Rev", 
+		"Dag", 
+		"Lea", 
+		"Rop", 
+		"Can", 
+		"Wre",
+        "---",
+        "---",
+        "---"
+    };
     ArrayList<String> weaps = new ArrayList<>(Arrays.asList(weapArr));
+    ArrayList<String> weapsPop = new ArrayList<>(Arrays.asList(weapArrPop));
 
     GameManager gm = new GameManager();
     
@@ -30,10 +44,12 @@ public class GameBoard {
         
         for(int i = 0; i < abr.length; i++) {
             String room = gm.getRoomAt(i).getName();
-            abr[i] = room.substring(0, 3);
+            //abr[i] = room.substring(0, 3);
+            abr[i] = room;
         }
 
         Collections.shuffle(weaps);
+        Collections.shuffle(weapsPop);
     }
 
     /* method to print out a player's first two letters of their name in the room corresponding to abr[i] 
@@ -50,6 +66,21 @@ public class GameBoard {
         if (playerInRoom == false) {
             System.out.print("  --  ");
         }
+    }
+
+    String printPlayerUpdated(int i) {
+        String player1 = "";
+        boolean playerInRoom = false;
+        for(int j = 0; j < names.length; j++) {
+            if (gm.getRoomAt(i).getName().equals(locs[j])) {
+                player1 = (names[j].substring(0,9));
+                playerInRoom = true;
+            }
+        }
+        if (playerInRoom == false) {
+            player1 = "    ---     ";
+        }
+        return player1;
     }
 
 	void formatLocs(ArrayList <String> pLocations, ArrayList <String> pNames) {
@@ -172,4 +203,18 @@ public class GameBoard {
         System.out.println("              +----------+       +----------+       +----------+");
 
     }
+    void popOut(ArrayList<String> pLocations, ArrayList<String> pNames) {
+        formatLocs(pLocations, pNames);
+        JFrame frame = new JFrame();
+        JOptionPane.showMessageDialog(frame, "             +-------------+       +-------------+       +-------------+\n              |                           |----|                            |----|                           |\n              |        " + abr[0] +   "          |        |          " + abr[1] +   "            |        |        " + abr[2] +     "       |\n              |          " + weapsPop.get(0) +   "           |        |           " + weapsPop.get(1) +   "           |        |           " + weapsPop.get(2) +     "          |\n              |      " + printPlayerUpdated(0) +   "      |        |       " + printPlayerUpdated(1) +   "      |        |       " + printPlayerUpdated(2) +     "     |\n              |                           |----|                            |----|                           |\n             +-------------+       +-------------+       +-------------+\n                     |            |                        |            |                        |            |\n                     |            |                        |            |                        |            |\n                     |            |                        |            |                        |            |\n             +-------------+       +-------------+       +-------------+\n              |                           |----|                            |----|                           |\n              |       " + abr[3] +   "         |        |    " + abr[4] +   "   |        |    " + abr[5] +     "   |\n              |          " + weapsPop.get(3) +   "           |        |           " + weapsPop.get(4) +   "           |        |           " + weapsPop.get(5) +     "           |\n              |      " + printPlayerUpdated(3) +     "      |        |       " + printPlayerUpdated(4) +     "      |        |       " + printPlayerUpdated(5) +     "     |\n              |                           |----|                            |----|                           |\n             +-------------+       +-------------+       +-------------+\n                     |            |                        |            |                        |            |\n                     |            |                        |            |                        |            |\n                     |            |                        |            |                        |            |\n             +-------------+       +-------------+       +-------------+\n              |                           |----|                            |----|                           |\n              |  " + abr[6] +   "    |        |      " + abr[7] +   "        |        |        " + abr[8] +     "        |\n              |          " + weapsPop.get(6) +   "           |        |           " + weapsPop.get(7) +   "           |        |           " + weapsPop.get(8) +     "           |\n              |      " + printPlayerUpdated(6) +     "      |        |       " + printPlayerUpdated(7) +     "      |        |       " + printPlayerUpdated(8) +     "     |\n              |                           |----|                            |----|                           |\n             +-------------+       +-------------+       +-------------+\n"
+        ,"Current GameBoard", JOptionPane.PLAIN_MESSAGE);
+  
+        frame.setSize(350,350);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setVisible(false);
+    }
+
+
+
+
 }

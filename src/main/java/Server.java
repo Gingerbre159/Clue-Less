@@ -744,12 +744,14 @@ public class Server {
             	
             	
             	/*Construct current game board*/
-            	if(tm.getCurrentTurn()/numPlayers == 0) {
-            		gb.constructBoardWithStartAreas();
-            	}
-            	else {
-					gb.contructBoardWithPlayers(getAllPlayerLocations(), chosenCharacters);
-            	}
+				if(tm.getCurrentTurn()/numPlayers == 0) {
+                    //gb.popOut(getAllPlayerLocations(), chosenCharacters);
+                    gb.constructBoardWithStartAreas();
+                }
+                else {
+                    gb.popOut(getAllPlayerLocations(), chosenCharacters);
+                    gb.contructBoardWithPlayers(getAllPlayerLocations(), chosenCharacters);
+                }
             	
             	
             	/*Display beginning of turn info*/
