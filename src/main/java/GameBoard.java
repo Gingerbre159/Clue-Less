@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 
 public class GameBoard {
 
@@ -7,6 +9,18 @@ public class GameBoard {
     private String[] abr;
 	private String[] names;
 	private String[] locs;
+    private String[] weapArr = {
+        "Rev", 
+		"Dag", 
+		"Lea", 
+		"Rop", 
+		"Can", 
+		"Wre",
+        "   ",
+        "   ",
+        "   "
+    };
+    ArrayList<String> weaps = new ArrayList<>(Arrays.asList(weapArr));
 
     GameManager gm = new GameManager();
     
@@ -18,7 +32,10 @@ public class GameBoard {
             String room = gm.getRoomAt(i).getName();
             abr[i] = room.substring(0, 3);
         }
+
+        Collections.shuffle(weaps);
     }
+
     /* method to print out a player's first two letters of their name in the room corresponding to abr[i] 
      * i is passd as the parameter 
      */
@@ -55,7 +72,7 @@ public class GameBoard {
         System.out.println("                                        | | |                        ");
         System.out.println("                                        | | |                        ");
         System.out.println("              +-------+       +-------+ | V | +-------+              ");
-        System.out.println("              |       |-------|       |-------|       |              ");
+        System.out.println("              |  " + weaps.get(0) + "  |-------|  " + weaps.get(1) + "  |-------|  " + weaps.get(2) + "  |              ");
         System.out.println("              |  " + abr[0] + "  |       |  " + abr[1] + "  |       |  " + abr[2] + "  |              ");
         System.out.println("              |       |-------|       |-------|       |              ");
         System.out.println("+-------+     +-------+       +-------+       +-------+     +-------+");
@@ -63,7 +80,7 @@ public class GameBoard {
         System.out.println("|Start  |   --> |   |           |   |           |   | <--   |Start  |");
         System.out.println("|Area   |-------|   |           |   |           |   |-------|Area   |");
         System.out.println("+-------+     +-------+       +-------+       +-------+     +-------+");
-        System.out.println("              |       |-------|       |-------|       |              ");
+        System.out.println("              |  " + weaps.get(3) + "  |-------|  " + weaps.get(4) + "  |-------|  " + weaps.get(5) + "  |              ");
         System.out.println("              |  " + abr[3] + "  |       |  " + abr[4] + "  |       |  " + abr[5] + "  |              ");
         System.out.println("              |       |-------|       |-------|       |              ");
         System.out.println("+-------+     +-------+       +-------+       +-------+              ");
@@ -71,7 +88,7 @@ public class GameBoard {
         System.out.println("|Start  |   --> |   |           |   |           |   |                ");
         System.out.println("|Area   |-------|   |           |   |           |   |                ");
         System.out.println("+-------+     +-------+       +-------+       +-------+              ");
-        System.out.println("              |       |-------|       |-------|       |              ");
+        System.out.println("              |  " + weaps.get(6) + "  |-------|  " + weaps.get(7) + "  |-------|  " + weaps.get(8) + "  |              ");
         System.out.println("              |  " + abr[6] + "  |       |  " + abr[7] + "  |       |  " + abr[8] + "  |              ");
         System.out.println("              |       |-------|       |-------|       |              ");
         System.out.println("              +-------+ | ^ | +-------+ | ^ | +-------+              ");
@@ -87,7 +104,7 @@ public class GameBoard {
     
     void constructBoard() {
         System.out.println("              +-------+       +-------+       +-------+");
-        System.out.println("              |       |-------|       |-------|       |");
+        System.out.println("              |  " + weaps.get(0) + "  |-------|  " + weaps.get(1) + "  |-------|  " + weaps.get(2) + "  |");
         System.out.println("              |  " + abr[0] + "  |       |  " + abr[1] + "  |       |  " + abr[2] + "  |");
         System.out.println("              |       |-------|       |-------|       |");
         System.out.println("              +-------+       +-------+       +-------+");
@@ -95,7 +112,7 @@ public class GameBoard {
         System.out.println("                |   |           |   |           |   |");
         System.out.println("                |   |           |   |           |   |");
         System.out.println("              +-------+       +-------+       +-------+");
-        System.out.println("              |       |-------|       |-------|       |");
+        System.out.println("              |  " + weaps.get(3) + "  |-------|  " + weaps.get(4) + "  |-------|  " + weaps.get(5) + "  |");
         System.out.println("              |  " + abr[3] + "  |       |  " + abr[4] + "  |       |  " + abr[5] + "  |");
         System.out.println("              |       |-------|       |-------|       |");
         System.out.println("              +-------+       +-------+       +-------+");
@@ -103,7 +120,7 @@ public class GameBoard {
         System.out.println("                |   |           |   |           |   |  ");
         System.out.println("                |   |           |   |           |   |  ");
         System.out.println("              +-------+       +-------+       +-------+");
-        System.out.println("              |       |-------|       |-------|       |");
+        System.out.println("              |  " + weaps.get(6) + "  |-------|  " + weaps.get(7) + "  |-------|  " + weaps.get(8) + "  |");
         System.out.println("              |  " + abr[6] + "  |       |  " + abr[7] + "  |       |  " + abr[8] + "  |");
         System.out.println("              |       |-------|       |-------|       |");
         System.out.println("              +-------+       +-------+       +-------+");
@@ -112,7 +129,7 @@ public class GameBoard {
     void contructBoardWithPlayers(ArrayList<String> pLocations, ArrayList<String> pNames) {
 		formatLocs(pLocations, pNames);
         System.out.println("              +----------+       +----------+       +----------+");
-        System.out.println("              |          |-------|          |-------|          |");
+        System.out.println("              |   " + weaps.get(0) + "    |-------|   " + weaps.get(1) + "    |-------|   " + weaps.get(2) + "    |");
         System.out.println("              |   " + abr[0] +   "    |       |   " + abr[1] +   "    |       |   " + abr[2] +   "    |");
         System.out.print("              |  ");
         printPlayer(0);
@@ -127,7 +144,7 @@ public class GameBoard {
         System.out.println("                  |   |              |   |              |   |");
         System.out.println("                  |   |              |   |              |   |");
         System.out.println("              +----------+       +----------+       +----------+");
-        System.out.println("              |          |-------|          |-------|          |");
+        System.out.println("              |   " + weaps.get(3) + "    |-------|   " + weaps.get(4) + "    |-------|   " + weaps.get(5) + "    |");
         System.out.println("              |   " + abr[3]   + "    |       |   " + abr[4] +   "    |       |   " + abr[5] +   "    |"); 
         System.out.print("              |  ");
         printPlayer(3);
@@ -142,7 +159,7 @@ public class GameBoard {
         System.out.println("                  |   |              |   |              |   |  ");
         System.out.println("                  |   |              |   |              |   |  ");
         System.out.println("              +----------+       +----------+       +----------+");
-        System.out.println("              |          |-------|          |-------|          |");
+        System.out.println("              |   " + weaps.get(6) + "    |-------|   " + weaps.get(7) + "    |-------|   " + weaps.get(8) + "    |");
         System.out.println("              |   " + abr[6] +   "    |       |   " + abr[7] +   "    |       |   " + abr[8] +   "    |");
         System.out.print("              |  ");
         printPlayer(6);
