@@ -745,12 +745,12 @@ public class Server {
             	
             	/*Construct current game board*/
 				if(tm.getCurrentTurn()/numPlayers == 0) {
-                    //gb.popOut(getAllPlayerLocations(), chosenCharacters);
-                    gb.constructBoardWithStartAreas();
+                    gb.popOutWithStartAreas();
+                    //gb.constructBoardWithStartAreas();
                 }
                 else {
                     gb.popOut(getAllPlayerLocations(), chosenCharacters);
-                    gb.contructBoardWithPlayers(getAllPlayerLocations(), chosenCharacters);
+                    //gb.contructBoardWithPlayers(getAllPlayerLocations(), chosenCharacters);
                 }
             	
             	
