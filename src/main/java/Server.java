@@ -5,6 +5,7 @@ import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
+import com.google.cloud.firestore.WriteResult;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.cloud.FirestoreClient;
@@ -284,8 +285,14 @@ public class Server {
 	
 	// Set the current turn in FireStore
 	public static void setCurrentTurn(int turnNumber) {
-	    DocumentReference docRef = db.collection("game").document("currentTurn");
-	    docRef.set(Collections.singletonMap("turnNumber", turnNumber));
+		DocumentReference docRef = db.collection("game").document("currentTurn");
+		ApiFuture<WriteResult> future = docRef.set(Collections.singletonMap("turnNumber", turnNumber));
+		
+		try {
+			future.get(); // This line will block and wait for the server to confirm the update.
+		} catch (InterruptedException | ExecutionException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	// Delete all player and turn data from the server to reset the game state
@@ -593,7 +600,7 @@ public class Server {
 
 
 		/**********Reset Button**********/
-        resetGame();
+        // resetGame();
 		/**********Reset Button**********/
         
 
@@ -885,12 +892,13 @@ public class Server {
 				if(!getWinCondition()){
 					updatePlayer(player);
 					setCurrentTurn(getCurrentTurn()+1);
-					if((player.playerNum + 1) >= numPlayers){
-						setCurrentPlayer(0);
-					}
-					else{
-						setCurrentPlayer(player.playerNum + 1);
-					}
+					// if((player.playerNum + 1) >= numPlayers){
+					// 	setCurrentPlayer(0);
+					// }
+					// else{
+					// 	setCurrentPlayer(player.playerNum + 1);
+					// }
+					setCurrentPlayer(getCurrentTurn()%numPlayers);
 
 					try {
 						// Sleep for a short time to allow turn to update
