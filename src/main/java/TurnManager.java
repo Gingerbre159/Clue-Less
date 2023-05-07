@@ -79,7 +79,7 @@ public class TurnManager {
 		
 		if(currentTurn/numPlayers == 0) {
 			options.add("Move");
-			options.add("Accusation");
+			//options.add("Accusation");
 			return options;
 		}
 		

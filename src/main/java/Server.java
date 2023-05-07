@@ -534,7 +534,13 @@ public class Server {
 	    DocumentReference docRef = db.collection("game").document("winCondition");
 	    Map<String, Object> data = new HashMap<>();
 	    data.put("value", winCondition);
-	    docRef.set(data);
+	    ApiFuture<WriteResult> future = docRef.set(data);
+
+		try {
+			future.get(); // This line will block and wait for the server to confirm the update.
+		} catch (InterruptedException | ExecutionException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	// Get win condition status
