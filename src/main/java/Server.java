@@ -340,7 +340,13 @@ public class Server {
 	// Set the current player in FireStore
 	public static void setCurrentPlayer(int currentPlayerNum) {
 	    DocumentReference docRef = db.collection("game").document("currentPlayer");
-	    docRef.set(Collections.singletonMap("playerNum", currentPlayerNum));
+	    ApiFuture<WriteResult> future = docRef.set(Collections.singletonMap("playerNum", currentPlayerNum));
+
+		try {
+			future.get(); // This line will block and wait for the server to confirm the update.
+		} catch (InterruptedException | ExecutionException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	// New version of getCurrentPlayer()
@@ -600,7 +606,7 @@ public class Server {
 
 
 		/**********Reset Button**********/
-        // resetGame();
+         resetGame();
 		/**********Reset Button**********/
         
 
