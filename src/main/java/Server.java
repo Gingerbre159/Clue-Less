@@ -896,15 +896,16 @@ public class Server {
                     
                 /*Next Turn*/   
 				if(!getWinCondition()){
+					int currTurn = getCurrentTurn() + 1;
 					updatePlayer(player);
-					setCurrentTurn(getCurrentTurn()+1);
+					setCurrentTurn(currTurn);
 					// if((player.playerNum + 1) >= numPlayers){
 					// 	setCurrentPlayer(0);
 					// }
 					// else{
 					// 	setCurrentPlayer(player.playerNum + 1);
 					// }
-					setCurrentPlayer(getCurrentTurn()%numPlayers);
+					setCurrentPlayer(currTurn%numPlayers);
 
 					try {
 						// Sleep for a short time to allow turn to update
@@ -930,6 +931,7 @@ public class Server {
         	else if(tm.getCurrentTurn() % numPlayers == player.playerNum && player.isEliminated) {
         		
         		setCurrentTurn(getCurrentTurn()+1);
+				setCurrentPlayer(getCurrentTurn()%numPlayers);
         		try {
                     // Sleep for a short time to allow turn to update
                     Thread.sleep(500);
